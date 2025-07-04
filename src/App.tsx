@@ -5,7 +5,8 @@ import Contact from './pages/Contact';
 import { useState, useEffect } from 'react';
 
 export default function App() {
-    const [dark, setDark] = useState(false);
+    //const [dark, setDark] = useState(false);
+    const [dark, setDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
     useEffect(() => {
         document.documentElement.classList.toggle('dark', dark);
