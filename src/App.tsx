@@ -16,7 +16,11 @@ export default function App() {
         <Router>
             <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
                 <header className="flex justify-between items-center p-4 shadow dark:shadow-lg">
-                    <h1 className="text-2xl font-bold">Benjamin 'Sweek' Roy</h1>
+                    <h1 className="text-2xl">
+                        <span className="font-extralight">Benjamin </span>
+                        <span className="font-medium">'Sweek' </span>
+                        <span className="font-extralight">Roy</span>
+                    </h1>
                     <nav className="flex gap-4">
                         <NavLink to="/" className={({ isActive }) => isActive ? 'underline' : ''}>Accueil</NavLink>
                         <NavLink to="/projects" className={({ isActive }) => isActive ? 'underline' : ''}>Projets</NavLink>
