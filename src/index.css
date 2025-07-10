@@ -19,6 +19,13 @@
 @theme {
   --font-ghoxdo: 'Ghoxdo';
   --font-sans: 'Poppins', sans-serif;
+  /*--color-dominant: #210B2C;
+  --color-secondary: #BC96E6;
+  --color-accent: #FFD166;*/
+  --color-dominant: #023436;
+  --color-secondary: #03B5AA;
+  --color-accent: #FF8552;
+
 }
 
 .poppins-thin {

@@ -5,7 +5,6 @@ import Contact from './pages/Contact';
 import { useState, useEffect } from 'react';
 
 export default function App() {
-    //const [dark, setDark] = useState(false);
     const [dark, setDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
     useEffect(() => {
@@ -14,23 +13,19 @@ export default function App() {
 
     return (
         <Router>
-            <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-                <header className="flex justify-between items-center p-4 shadow dark:shadow-lg">
-                    <h1 className="text-2xl">
-                        <span className="font-extralight">Benjamin </span>
-                        <span className="font-medium">'Sweek' </span>
-                        <span className="font-extralight">Roy</span>
-                    </h1>
-                    <nav className="flex gap-4">
-                        <NavLink to="/" className={({ isActive }) => isActive ? 'underline' : ''}>Accueil</NavLink>
+            <div className="min-h-screen bg-secondary dark:bg-dominant text-dominant dark:text-secondary transition-colors duration-300">
+                <header className="flex justify-between items-center p-8">
+                    <h1 className="text-2xl font-medium hover:text-accent">Sweek.</h1>
+                    <nav className="flex gap-8 text-xl border border-dominant dark:border-secondary pb-4">
+                        <NavLink to="/" className={({ isActive }) => isActive ? 'underline hover:text-accent' : 'hover:text-accent'}>Accueil</NavLink>
                         <NavLink to="/projects" className={({ isActive }) => isActive ? 'underline' : ''}>Projets</NavLink>
                         <NavLink to="/contact" className={({ isActive }) => isActive ? 'underline' : ''}>Contact</NavLink>
-                        <button onClick={() => setDark(d => !d)} className="ml-4">
-                            {dark ? '☀️' : '🌙'}
-                        </button>
                     </nav>
+                    <button onClick={() => setDark(d => !d)} className="ml-4">
+                        {dark ? '☀️' : '🌙'}
+                    </button>
                 </header>
-                <main className="p-6">
+                <main className="p-8">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/projects" element={<Projects />} />
