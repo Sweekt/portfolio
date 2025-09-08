@@ -8,7 +8,7 @@ export default function Projects() {
             transition={{ duration: 0.4 }}
         >
             <canvas id="gameCanvas" width="1200" height="800"></canvas>
-            { import('../scripts/test.ts') && true }
+            { import('../scripts/jump.ts') && true }
         </motion.section>
     );
 }
