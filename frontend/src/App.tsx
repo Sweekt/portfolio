@@ -15,16 +15,16 @@ export default function App() {
     return (
         <Router>
             <div className="min-h-screen bg-text text-bg dark:bg-bg dark:text-text transition-colors duration-300">
-                <header className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-900">
-                    <NavLink to="/" className="text-2xl font-medium text-accent2">Sweek.</NavLink>
+                <header className="flex justify-between items-center border-b-2 border-gray-200 dark:border-accent2">
+                    <NavLink to="/" className="text-2xl font-medium text-accent2 p-4 hover:text-hover">Sweek.</NavLink>
                     <nav className="flex gap-8 text-xl">
-                        <NavLink to="/experiences" className={({ isActive }) => isActive ? 'text-accent1' : 'hover:text-hover'}>Experiences</NavLink>
-                        <NavLink to="/projects" className={({ isActive }) => isActive ? 'text-accent1' : 'hover:text-hover'}>Projets</NavLink>
-                        <NavLink to="/contact" className={({ isActive }) => isActive ? 'text-accent1' : 'hover:text-hover'}>Contact</NavLink>
+                        <NavLink to="/experiences" className={({ isActive }) => isActive ? 'p-4 text-accent1 border-b-3 border-accent2' : 'p-4 hover:text-hover hover:border-b-2 hover:border-hover'}>Experiences</NavLink>
+                        <NavLink to="/projects" className={({ isActive }) => isActive ? 'p-4 text-accent1 border-b-3 border-accent2' : 'p-4 hover:text-hover hover:border-b-2 hover:border-hover'}>Projets</NavLink>
+                        <NavLink to="/contact" className={({ isActive }) => isActive ? 'p-4 text-accent1 border-b-3 border-accent2' : 'p-4 hover:text-hover hover:border-b-2 hover:border-hover'}>Contact</NavLink>
+                        <button onClick={() => setDark(d => !d)} className="ml-4">
+                            {dark ? '☀️' : '🌙'}
+                        </button>
                     </nav>
-                    <button onClick={() => setDark(d => !d)} className="ml-4">
-                        {dark ? '☀️' : '🌙'}
-                    </button>
                 </header>
                 <main className="p-8">
                     <Routes>

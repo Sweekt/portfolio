@@ -7,8 +7,11 @@ export default function Experiences() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
         >
-            <h2 className="text-3xl font-semibold mb-4">Bienvenue !</h2>
-            <p>Je suis développeur web spécialisé en React, TypeScript et interfaces modernes. Voici mon portfolio.</p>
+            <div className="ml-2 mr-2 bg-accent2/10 p-4 rounded-lg border border-accent2/20">
+				<h2 className="text-3xl font-semibold mb-4">Bienvenue !</h2>
+                <p>Je suis développeur web spécialisé en React, TypeScript et interfaces modernes. Voici mon portfolio.</p>
+            </div>
+
         </motion.section>
     );
 }
