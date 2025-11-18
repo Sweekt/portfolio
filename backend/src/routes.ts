@@ -6,10 +6,11 @@ import {
 	inputHandler,
 	inputSchema,
 	INTERNAL_PASSWORD,
-	Player,
 	readySchema,
 	resetInput,
 } from "./api.js";
+import { WebSocket } from "ws";
+import { Player } from "./class.js"
 import {getMatchHistory, MatchResult} from "./database.js"
 import {soloMode} from "./solo.js";
 import {

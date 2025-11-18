@@ -1,4 +1,4 @@
-import {Player} from "./api.js";
+import {Player} from "./class.js";
 import {rooms} from "./netcode.js";
 
 export function joinRoomSpec(player: Player, roomId: number) {

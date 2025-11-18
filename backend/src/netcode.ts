@@ -1,5 +1,6 @@
 // Netcode
-import { Ball, gameState, hazardGenerator, moveBall, moveHazard, movePaddle, Player, Room, timerCheck } from './api.js'
+import { hazardGenerator, moveBall, moveHazard, movePaddle, timerCheck } from './api.js'
+import { Ball, gameState, Player, Room } from './class.js'
 import { insertMatchResult } from './database.js'
 import { fetchNotifyUser, fetchPlayerWin, updateMmr } from './utils.js'
 

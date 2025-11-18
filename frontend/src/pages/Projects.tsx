@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react'; // 👈 Importez useRef
-import { jumpGame } from "../scripts/jump.ts";
+import { Pong } from "../scripts/pong.ts";
 
 export default function Projects() {
     // 1. Créer la ref (doit être typée comme HTMLCanvasElement ou null)
@@ -10,7 +10,7 @@ export default function Projects() {
         // 2. Vérifiez si la ref a un élément courant (l'élément est monté)
         if (canvasRef.current) {
             // 3. Passez l'élément canvas directement à votre fonction
-            jumpGame(canvasRef.current);
+            Pong(canvasRef.current, 'local');
         }
     }, []);
 

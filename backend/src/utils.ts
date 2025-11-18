@@ -1,4 +1,5 @@
-import { INTERNAL_PASSWORD, Player } from './api.js'
+import { INTERNAL_PASSWORD } from './api.js'
+import { Player } from './class.js'
 
 export const fetchIdByNickName = async (nickName: string): Promise<number> => {
 	if (nickName.includes(' '))

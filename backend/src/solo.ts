@@ -1,16 +1,6 @@
 //Solo mode
-import {
-	Ball,
-	bounceAngle,
-	checkCollision,
-	gameState,
-	hazardEffect, hazardGenerator,
-	keyInput, moveHazard,
-	norAngle,
-	Paddle,
-	Player, resetHazard, resetInput,
-	Timer, timerCheck
-} from "./api.js";
+import { bounceAngle, checkCollision, hazardEffect, hazardGenerator, moveHazard, norAngle, resetHazard, resetInput, timerCheck } from "./api.js";
+import { Ball, gameState, keyInput, Paddle, Player, Timer } from "./class.js";
 
 function resetGameSolo(ball: Ball, lPaddle: Paddle, rPaddle: Paddle, game: gameState, lInput: keyInput, rInput: keyInput) {
 	game.start = false;
