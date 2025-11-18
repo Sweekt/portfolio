@@ -364,7 +364,7 @@ export function Pong(canvas: HTMLCanvasElement, mode: string, room?: number) {
 	}
 
 	try {
-		const socket = new WebSocket(`ws://localhost:8080`)
+		const socket = new WebSocket(`ws://localhost:8080/ws`)
 		const keyUpHandler = createKeyUpHandler(socket)
 		const keyDownHandler = createKeyDownHandler(socket, game, mode)
 		pongConnect = true

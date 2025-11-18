@@ -259,7 +259,7 @@ fastify.register(fastifyWebsocket);
 
 fastify.register(pongRoutes);
 
-fastify.listen({ port: 4443, host: '0.0.0.0' }, (err, adrr) => {
+fastify.listen({ port: 8080, host: '0.0.0.0' }, (err, adrr) => {
 	if (err) {
 		console.error(err);
 		process.exit(1);
