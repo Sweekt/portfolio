@@ -1,27 +1,21 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react'; // 👈 Importez useRef
-import { Pong } from "../scripts/pong.ts";
+import {NavLink} from "react-router-dom";
 
 export default function Projects() {
-    // 1. Créer la ref (doit être typée comme HTMLCanvasElement ou null)
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    useEffect(() => {
-        // 2. Vérifiez si la ref a un élément courant (l'élément est monté)
-        if (canvasRef.current) {
-            // 3. Passez l'élément canvas directement à votre fonction
-            Pong(canvasRef.current, 'local');
-        }
-    }, []);
-
     return (
         <motion.section
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
         >
-            {/* 4. Attachez la ref au canvas (l'ID n'est plus strictement nécessaire) */}
-            <canvas ref={canvasRef} width="1200" height="800"></canvas>
+            <div className="flex justify-center items-stretch gap-10">
+                <div className="flex-1 ml-2 mr-2 bg-accent2/10 p-4 rounded-lg border border-accent2/20">
+                    <NavLink to="/projects/Pong" className="text-3xl font-semibold mb-4">Play Pong</NavLink>
+                </div>
+                <div className="flex-1 ml-2 mr-2 bg-accent2/10 p-4 rounded-lg border border-accent2/20">
+                    <NavLink to="/projects/Pong" className="text-3xl font-semibold mb-4">Play Tower Defense</NavLink>
+                </div>
+            </div>
         </motion.section>
     );
 }

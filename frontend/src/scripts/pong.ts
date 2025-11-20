@@ -78,7 +78,7 @@ class Assets {
 
 let pongConnect: boolean
 
-export function Pong(canvas: HTMLCanvasElement, mode: string, room?: number) {
+export function pongGame(canvas: HTMLCanvasElement, mode: string, room?: number) {
 	if (!room)
 		room = -1
 	const ctx = canvas.getContext('2d')!
