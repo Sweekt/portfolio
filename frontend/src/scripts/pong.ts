@@ -70,9 +70,9 @@ class Assets {
 	BallUp: HTMLImageElement = new Image()
 
 	constructor() {
-		this.BarUp.src = './assets/pong/barup.png'
-		this.BarDown.src = './assets/pong/bardown.png'
-		this.BallUp.src = './assets/pong/ballup.png'
+		this.BarUp.src = '../assets/pong/barup.png'
+		this.BarDown.src = '../assets/pong/bardown.png'
+		this.BallUp.src = '../assets/pong/ballup.png'
 	}
 }
 
