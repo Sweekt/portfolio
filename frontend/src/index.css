@@ -25,6 +25,8 @@
   --color-accent1: #FF5722;
   --color-accent2: #673AB7;
   --color-hover: #FFEB3B;
+  --shadow-cards: 0 0px 35px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  --shadow-game: 0 0px 50px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
 }
 
 .poppins-thin {

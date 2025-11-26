@@ -41,7 +41,7 @@ export default function ScrollPage({ dark, setDark }: ScrollPageProps) {
 
     return (
         <>
-            <main className="p-8">
+            <main className="">
                 {/* TOUTES les sections doivent avoir un ID correspondant au hash */}
                 <section id="home"><Home /></section>
                 <section id="experiences" className="mt-16"><Experiences /></section>

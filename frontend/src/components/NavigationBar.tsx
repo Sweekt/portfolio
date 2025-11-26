@@ -8,6 +8,8 @@ import {
     NavigationMenuTrigger
 } from "./NavigationMenu.tsx";
 import {cn} from "../lib/utils.tsx";
+import {FaceIcon, GitHubLogoIcon, ImageIcon, LinkedInLogoIcon, SunIcon} from "@radix-ui/react-icons"
+import {LinkedinIcon} from "lucide-react";
 
 // --- Définition des sections pour la navigation (pour l'utiliser dans le header) ---
 const NAV_SECTIONS = [
@@ -107,7 +109,9 @@ export default function NavigationBar() {
                     Sweek.
                 </NavLink>
             </nav>
-            <nav className="flex-1 text-right">
+            <nav className="flex-1 flex items-center justify-end">
+                <a href="https://www.linkedin.com/in/benjamin-roy22" target="_blank" rel="noopener noreferrer" className="ml-4"><LinkedInLogoIcon /></a>
+                <a href="https://github.com/Sweekt" target="_blank" rel="noopener noreferrer" className="ml-4"><GitHubLogoIcon /></a>
                 <button onClick={() => setDark(d => !d)} className="ml-4">
                     {dark ? '☀️' : '🌙'}
                 </button>
