@@ -104,7 +104,7 @@ export default function NavigationBar() {
                 </NavigationMenu>
             </nav>
             <nav className="flex-1 text-center">
-                <NavLink to="/#home" className="text-4xl font-medium text-purple-600 p-4 hover:text-yellow-500 dark:hover:text-yellow-400">
+                <NavLink to="/#home" className="text-4xl font-medium text-purple-600 p-4 hover:text-yellow-600 dark:hover:text-yellow-500">
                     Sweek.
                 </NavLink>
             </nav>
