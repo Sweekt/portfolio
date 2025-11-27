@@ -1,6 +1,4 @@
-import { motion } from 'framer-motion';<div className="flex p-24 justify-center items-center w-full">
-                <canvas className="shadow-game shadow-accent2/50" ref={canvasRef} width="1200" height="800"></canvas>
-            </div>
+import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { pongGame } from "../scripts/pong.ts";
 

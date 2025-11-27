@@ -8,8 +8,7 @@ import {
     NavigationMenuTrigger
 } from "./NavigationMenu.tsx";
 import {cn} from "../lib/utils.tsx";
-import {FaceIcon, GitHubLogoIcon, ImageIcon, LinkedInLogoIcon, SunIcon} from "@radix-ui/react-icons"
-import {LinkedinIcon} from "lucide-react";
+import {GitHubLogoIcon, LinkedInLogoIcon} from "@radix-ui/react-icons"
 
 // --- Définition des sections pour la navigation (pour l'utiliser dans le header) ---
 const NAV_SECTIONS = [
@@ -46,11 +45,11 @@ export default function NavigationBar() {
                             to={`/#${id}`}
                             className={cn(
                                 // Vos styles personnalisés de base
-                                "bg-transparent hover:bg-transparent hover:text-hover data-[active]:bg-transparent focus:bg-transparent",
+                                "font-semibold bg-transparent hover:bg-transparent hover:text-hover data-[active]:bg-transparent focus:bg-transparent text-bold hover:text-yellow-500 dark:hover:text-yellow-400",
                                 // Le style CONDITIONNEL si actif
                                 isSectionActive(id)
-                                    ? "text-accent1 border-b-2 border-accent2 font-bold" // Style Actif
-                                    : "text-bg dark:text-text" // Style Inactif par défaut
+                                    ? "text-purple-400" // Style Actif
+                                    : "text-neutral-950 dark:text-neutral-50" // Style Inactif par défaut
                             )}
                         >
                             {name}
@@ -62,27 +61,27 @@ export default function NavigationBar() {
             return (
                 <NavigationMenuItem key={`nav-item-${id}`}>
                     <NavigationMenuTrigger
-                        className="bg-transparent hover:bg-transparent hover:text-hover"
+                        className="bg-transparent hover:bg-transparent"
                     >
                         <NavLink
                             to={`/#${id}`}
                             className={cn(
                                 // Vos styles personnalisés de base
-                                "bg-transparent hover:bg-transparent hover:text-hover data-[active]:bg-transparent focus:bg-transparent",
+                                "font-semibold bg-transparent hover:bg-transparent data-[active]:bg-transparent focus:bg-transparent hover:text-yellow-500 dark:hover:text-yellow-400",
                                 // Le style CONDITIONNEL si actif
                                 isSectionActive(id)
-                                    ? "text-accent1 border-b-2 border-accent2 font-bold" // Style Actif
-                                    : "text-bg dark:text-text" // Style Inactif par défaut
+                                    ? "text-purple-400" // Style Actif
+                                    : "text-neutral-950 dark:text-neutral-50" // Style Inactif par défaut
                             )}
                         >
                             {name}
                         </NavLink>
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                        <ul className="grid w-[200px] gap-3 p-4">
+                        <ul className="grid w-[150px] gap-3 p-2">
                             <li>
                                 <NavigationMenuLink asChild>
-                                    <NavLink to="/projects/Pong" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                                    <NavLink to="/projects/Pong" className="text-center block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent text-neutral-950 dark:text-neutral-50 hover:text-yellow-500 dark:hover:text-yellow-400 focus:bg-accent focus:text-accent-foreground">
                                         Pong Game
                                     </NavLink>
                                 </NavigationMenuLink>
@@ -95,7 +94,7 @@ export default function NavigationBar() {
     }
 
     return (
-        <header className="flex justify-between items-center border-b-2 border-gray-200 dark:border-accent2 sticky top-0 z-10 bg-text dark:bg-bg transition-colors duration-300 px-4 p-4">
+        <header className="flex justify-between items-center border-b-2 border-purple-400 dark:border-purple-600 sticky top-0 z-10 bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300 px-4 p-4">
             {/* Lien Logo */}
             <nav className="flex-1 gap-8 text-xl items-center">
                 <NavigationMenu>
@@ -105,13 +104,13 @@ export default function NavigationBar() {
                 </NavigationMenu>
             </nav>
             <nav className="flex-1 text-center">
-                <NavLink to="/#home" className="text-4xl font-medium text-accent2 p-4 hover:text-hover">
+                <NavLink to="/#home" className="text-4xl font-medium text-purple-600 p-4 hover:text-yellow-500 dark:hover:text-yellow-400">
                     Sweek.
                 </NavLink>
             </nav>
             <nav className="flex-1 flex items-center justify-end">
-                <a href="https://www.linkedin.com/in/benjamin-roy22" target="_blank" rel="noopener noreferrer" className="ml-4"><LinkedInLogoIcon /></a>
-                <a href="https://github.com/Sweekt" target="_blank" rel="noopener noreferrer" className="ml-4"><GitHubLogoIcon /></a>
+                <a href="https://www.linkedin.com/in/benjamin-roy22" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-500 dark:hover:text-yellow-400"><LinkedInLogoIcon /></a>
+                <a href="https://github.com/Sweekt" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-500 dark:hover:text-yellow-400"><GitHubLogoIcon /></a>
                 <button onClick={() => setDark(d => !d)} className="ml-4">
                     {dark ? '☀️' : '🌙'}
                 </button>

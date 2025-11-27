@@ -6,16 +6,14 @@ import NavigationBar from './components/NavigationBar';
 export default function App() {
     return (
         <Router>
-            <div className="min-h-screen bg-text text-bg dark:bg-bg dark:text-text transition-colors duration-300">
+            <div className="min-h-screen bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50 transition-colors duration-300">
                 <NavigationBar />
-
                 <main>
                     <Routes>
                         <Route path="/" element={<ScrollPage />} />
                         <Route path="/projects/:Pong" element={<Pong />} />
                     </Routes>
                 </main>
-
             </div>
         </Router>
     );

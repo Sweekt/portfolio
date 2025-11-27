@@ -18,7 +18,7 @@ export default function Projects() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
         >
-            <div className="my-40 flex justify-center items-stretch gap-12">
+            <div className="py-40 flex justify-center items-stretch gap-12">
                 <NavLink to="/projects/Pong">
                     <Card className="flex-1 max-w-sm">
                         <img src={pongIcon}></img>
