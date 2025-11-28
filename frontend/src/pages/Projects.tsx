@@ -10,6 +10,7 @@ import {
     CardTitle,
 } from "../components/Card"
 import pongIcon from '../assets/pongIcon.png';
+import tdIcon from '../assets/tdIcon.png';
 
 export default function Projects() {
     return (
@@ -31,9 +32,9 @@ export default function Projects() {
                         </CardContent>
                     </Card>
                 </NavLink>
-                <NavLink to="/projects/Pong">
+                <NavLink to="/projects/TowerDefense">
                     <Card className="flex-1 max-w-sm">
-                        <img src={pongIcon}></img>
+                        <img src={tdIcon}></img>
                         <CardHeader>
                             <CardTitle>Slime Defender</CardTitle>
                             <CardDescription>1 versus 1 tower defense game</CardDescription>

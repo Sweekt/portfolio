@@ -1,17 +1,17 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import { pongGame, pongStop } from "../scripts/pong.ts";
+import { tdGame, tdStop } from "../scripts/td.ts";
 
-export default function Pong() {
+export default function TowerDefense() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
         if (canvasRef.current) {
-            pongGame(canvasRef.current, 'local');
+            tdGame(canvasRef.current);
         }
         return () => {
             console.log("Déconnexion du jeu...");
-            pongStop(); // ou socket.close()
+           tdStop(); // ou socket.close()
         };
     }, []);
 
