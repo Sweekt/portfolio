@@ -16,8 +16,8 @@ export default function Home() {
                     <span className="text-2xl font-light"> Software developper with a creative touch.</span>
                     </h1>
                     <h1 className="flex -ml-4 pt-6">
-                        <a href="https://www.linkedin.com/in/benjamin-roy22" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-500 dark:hover:text-yellow-400"><LinkedInLogoIcon width={30} height={30}/></a>
-                        <a href="https://github.com/Sweekt" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-500 dark:hover:text-yellow-400"><GitHubLogoIcon width={30} height={30}/></a>
+                        <a href="https://www.linkedin.com/in/benjamin-roy22" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-600 dark:hover:text-yellow-500"><LinkedInLogoIcon width={30} height={30}/></a>
+                        <a href="https://github.com/Sweekt" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-600 dark:hover:text-yellow-500"><GitHubLogoIcon width={30} height={30}/></a>
                     </h1>
                 </div>
                 <div className="flex-1 h-full flex items-center">

@@ -6,12 +6,12 @@ export default function TowerDefense() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (canvasRef.current) {
             tdGame(canvasRef.current);
         }
         return () => {
-            console.log("Déconnexion du jeu...");
-           tdStop(); // ou socket.close()
+           tdStop();
         };
     }, []);
 

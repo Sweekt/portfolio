@@ -81,7 +81,7 @@ export default function NavigationBar() {
                         <ul className="grid w-[150px] gap-3 p-2 text-end">
                             <li>
                                 <NavigationMenuLink asChild>
-                                    <NavLink to="/projects/Pong" className=" block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent text-neutral-950 dark:text-neutral-50 hover:text-yellow-600 dark:hover:text-yellow-500 focus:bg-accent focus:text-accent-foreground">
+                                    <NavLink to="/projects/Pong" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent text-neutral-950 dark:text-neutral-50 hover:text-yellow-600 dark:hover:text-yellow-500 focus:bg-accent focus:text-accent-foreground">
                                         Pong Game
                                     </NavLink>
                                 </NavigationMenuLink>

@@ -6,7 +6,7 @@ export default function Contact() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-        ><div className="grid place-items-center text-center p-4 min-h-[30vh]">
+        ><div className="grid place-items-center text-center py-32 min-h-[30vh]">
             <div className="w-full">
                 <h2 className="text-3xl font-semibold mb-4">Contact Me</h2>
                 <form className="mx-auto space-y-4 max-w-md p-4">
