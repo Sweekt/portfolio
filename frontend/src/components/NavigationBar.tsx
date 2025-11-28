@@ -45,7 +45,7 @@ export default function NavigationBar() {
                             to={`/#${id}`}
                             className={cn(
                                 // Vos styles personnalisés de base
-                                "font-semibold bg-transparent hover:bg-transparent hover:text-hover data-[active]:bg-transparent focus:bg-transparent text-bold hover:text-yellow-500 dark:hover:text-yellow-400",
+                                "font-semibold bg-transparent hover:bg-transparent hover:text-hover data-[active]:bg-transparent focus:bg-transparent text-bold hover:text-yellow-600 dark:hover:text-yellow-500",
                                 // Le style CONDITIONNEL si actif
                                 isSectionActive(id)
                                     ? "text-purple-400" // Style Actif
@@ -67,7 +67,7 @@ export default function NavigationBar() {
                             to={`/#${id}`}
                             className={cn(
                                 // Vos styles personnalisés de base
-                                "font-semibold bg-transparent hover:bg-transparent data-[active]:bg-transparent focus:bg-transparent hover:text-yellow-500 dark:hover:text-yellow-400",
+                                "font-semibold bg-transparent hover:bg-transparent data-[active]:bg-transparent focus:bg-transparent hover:text-yellow-600 dark:hover:text-yellow-500",
                                 // Le style CONDITIONNEL si actif
                                 isSectionActive(id)
                                     ? "text-purple-400" // Style Actif
@@ -78,11 +78,16 @@ export default function NavigationBar() {
                         </NavLink>
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                        <ul className="grid w-[150px] gap-3 p-2">
+                        <ul className="grid w-[150px] gap-3 p-2 text-end">
                             <li>
                                 <NavigationMenuLink asChild>
-                                    <NavLink to="/projects/Pong" className="text-center block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent text-neutral-950 dark:text-neutral-50 hover:text-yellow-500 dark:hover:text-yellow-400 focus:bg-accent focus:text-accent-foreground">
+                                    <NavLink to="/projects/Pong" className=" block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent text-neutral-950 dark:text-neutral-50 hover:text-yellow-600 dark:hover:text-yellow-500 focus:bg-accent focus:text-accent-foreground">
                                         Pong Game
+                                    </NavLink>
+                                </NavigationMenuLink>
+                                <NavigationMenuLink asChild>
+                                    <NavLink to="/projects/TowerDefense" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent text-neutral-950 dark:text-neutral-50 hover:text-yellow-600 dark:hover:text-yellow-500 focus:bg-accent focus:text-accent-foreground">
+                                        Slime Defender
                                     </NavLink>
                                 </NavigationMenuLink>
                             </li>
@@ -109,8 +114,8 @@ export default function NavigationBar() {
                 </NavLink>
             </nav>
             <nav className="flex-1 flex items-center justify-end">
-                <a href="https://www.linkedin.com/in/benjamin-roy22" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-500 dark:hover:text-yellow-400"><LinkedInLogoIcon /></a>
-                <a href="https://github.com/Sweekt" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-500 dark:hover:text-yellow-400"><GitHubLogoIcon /></a>
+                <a href="https://www.linkedin.com/in/benjamin-roy22" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-600 dark:hover:text-yellow-500"><LinkedInLogoIcon /></a>
+                <a href="https://github.com/Sweekt" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-600 dark:hover:text-yellow-500"><GitHubLogoIcon /></a>
                 <button onClick={() => setDark(d => !d)} className="ml-4">
                     {dark ? '☀️' : '🌙'}
                 </button>
