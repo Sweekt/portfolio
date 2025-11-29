@@ -28,7 +28,7 @@ export default function Pong() {
                 <div className="flex py-16 justify-center items-center w-full">
                     <canvas className="shadow-game shadow-purple-800/50" ref={canvasRef} width="1200" height="800"></canvas>
                 </div>
-                <div className="flex flex-col mx-50 bg-purple-600/30 p-4 rounded-lg border-3 border-purple-600/30">
+                <div className="flex flex-col mx-50 bg-purple-800/50 dark:bg-purple-800/30 p-4 rounded-lg border-3 border-purple-800/50 dark:border-purple-800/30">
                     <h2 className="text-center font-semibold text-3xl">How to play ?</h2>
                     <div className="flex flex-line">
                         <div className="flex-1">
@@ -38,7 +38,7 @@ export default function Pong() {
                             <p className="text-center font-normal text-xl">Power-Up Cheatsheet</p>
                             <img src={barUp} alt="Bar Up" />Increase the paddle size of the player who striked this power-up
                             <img src={barDown} alt="Bar Down" />Reduce the paddle size of the player who striked this power-up
-                            <img src={ballUp} alt="Ball Up" />Increase ball Speed
+                            <img src={ballUp} alt="Ball Up" />Increase ball speed
                         </div>
                     </div>
                 </div>

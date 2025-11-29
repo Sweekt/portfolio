@@ -48,7 +48,7 @@ export default function NavigationBar() {
                                 "font-semibold bg-transparent hover:bg-transparent hover:text-hover data-[active]:bg-transparent focus:bg-transparent text-bold hover:text-yellow-600 dark:hover:text-yellow-500",
                                 // Le style CONDITIONNEL si actif
                                 isSectionActive(id)
-                                    ? "text-purple-400" // Style Actif
+                                    ? "text-purple-800" // Style Actif
                                     : "text-neutral-950 dark:text-neutral-50" // Style Inactif par défaut
                             )}
                         >
@@ -70,7 +70,7 @@ export default function NavigationBar() {
                                 "font-semibold bg-transparent hover:bg-transparent data-[active]:bg-transparent focus:bg-transparent hover:text-yellow-600 dark:hover:text-yellow-500",
                                 // Le style CONDITIONNEL si actif
                                 isSectionActive(id)
-                                    ? "text-purple-400" // Style Actif
+                                    ? "text-purple-800" // Style Actif
                                     : "text-neutral-950 dark:text-neutral-50" // Style Inactif par défaut
                             )}
                         >
@@ -99,7 +99,7 @@ export default function NavigationBar() {
     }
 
     return (
-        <header className="flex justify-between items-center border-b-2 border-purple-400 dark:border-purple-600 sticky top-0 z-10 bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300 px-4 p-4">
+        <header className="flex justify-between items-center border-b-2 border-purple-800 sticky top-0 z-10 bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300 px-4 p-4">
             {/* Lien Logo */}
             <nav className="flex-1 gap-8 text-xl items-center">
                 <NavigationMenu>
@@ -109,7 +109,7 @@ export default function NavigationBar() {
                 </NavigationMenu>
             </nav>
             <nav className="flex-1 text-center">
-                <NavLink to="/#home" className="text-4xl font-medium text-purple-600 p-4 hover:text-yellow-600 dark:hover:text-yellow-500">
+                <NavLink to="/#home" className="text-4xl font-medium text-purple-800 p-4 hover:text-yellow-600 dark:hover:text-yellow-500">
                     Sweek.
                 </NavLink>
             </nav>
