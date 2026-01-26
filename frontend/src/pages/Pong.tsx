@@ -1,9 +1,13 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import {
+    Gamepad2,
+    Zap
+} from 'lucide-react';
 import { pongGame, pongStop } from "../scripts/pong.ts";
 import barUp from "../assets/pong/barup.png";
 import barDown from "../assets/pong/bardown.png";
-import ballUp from "..//assets/pong/ballup.png";
+import ballUp from "../assets/pong/ballup.png";
 
 export default function Pong() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -23,22 +27,70 @@ export default function Pong() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
+            className="w-full flex flex-col items-center pt-6 pb-12 px-4"
         >
-            <div className="pb-16">
-                <div className="flex py-16 justify-center items-center w-full">
-                    <canvas className="shadow-game shadow-purple-800/50" ref={canvasRef} width="1200" height="800"></canvas>
+            <div className="w-full grid grid-cols-1 2xl:grid-cols-[1fr_auto_1fr] gap-10 items-start">
+                <div className="hidden 2xl:block"></div>
+                <div className="flex justify-center items-center">
+                    <canvas
+                        className="shadow-2xl shadow-purple-900/20 dark:shadow-purple-800/50 max-w-full h-auto bg-slate-950 rounded-xl border-4 border-slate-200 dark:border-purple-500/20"
+                        ref={canvasRef}
+                        width="1200"
+                        height="800"
+                    ></canvas>
                 </div>
-                <div className="flex flex-col mx-50 bg-purple-800/50 dark:bg-purple-800/30 p-4 rounded-lg border-3 border-purple-800/50 dark:border-purple-800/30">
-                    <h2 className="text-center font-semibold text-3xl">How to play ?</h2>
-                    <div className="flex flex-line">
-                        <div className="flex-1">
-                            <p className="text-center font-normal text-xl">Moving the paddle</p>
+                <div className="mx-auto 2xl:mx-0 w-full max-w-4xl 2xl:max-w-sm
+                    bg-white dark:bg-purple-950/40 backdrop-blur-xl
+                    p-8 rounded-3xl border-2 border-slate-100 dark:border-white/10
+                    shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-none">
+                    <h2 className="text-center font-black text-3xl tracking-tighter uppercase mb-10
+                        text-slate-950 dark:text-white">
+                        How to play ?
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-1 gap-10">
+                        <div className="space-y-6">
+                            <h3 className="text-sm font-black text-indigo-600 dark:text-purple-400 flex items-center gap-2 uppercase tracking-widest">
+                                <Gamepad2 size={20} strokeWidth={2.5} />
+                                Controls
+                            </h3>
+                            <div className="space-y-5">
+                                <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 p-3 rounded-2xl border border-slate-100 dark:border-transparent">
+                                    <div className="flex gap-1">
+                                        <kbd className="px-3 py-1.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-950 dark:text-white shadow-sm">W</kbd>
+                                        <kbd className="px-3 py-1.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-950 dark:text-white shadow-sm">S</kbd>
+                                    </div>
+                                    <span className="text-slate-900 dark:text-slate-200 text-sm font-bold">Left Player</span>
+                                </div>
+                                <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 p-3 rounded-2xl border border-slate-100 dark:border-transparent">
+                                    <div className="flex gap-1">
+                                        <kbd className="px-3 py-1.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-950 dark:text-white shadow-sm">▲</kbd>
+                                        <kbd className="px-3 py-1.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-950 dark:text-white shadow-sm">▼</kbd>
+                                    </div>
+                                    <span className="text-slate-900 dark:text-slate-200 text-sm font-bold">Right Player</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex-1 items-center justify-center">
-                            <p className="text-center font-normal text-xl">Power-Up Cheatsheet</p>
-                            <img src={barUp} alt="Bar Up" />Increase the paddle size of the player who striked this power-up
-                            <img src={barDown} alt="Bar Down" />Reduce the paddle size of the player who striked this power-up
-                            <img src={ballUp} alt="Ball Up" />Increase ball speed
+                        <div className="space-y-6">
+                            <h3 className="text-sm font-black text-indigo-600 dark:text-purple-400 flex items-center gap-2 uppercase tracking-widest">
+                                <Zap size={20} strokeWidth={2.5} />
+                                Power-Ups
+                            </h3>
+                            <div className="space-y-4">
+                                {[
+                                    { img: barUp, text: "Increase paddle size"},
+                                    { img: barDown, text: "Reduce paddle size"},
+                                    { img: ballUp, text: "Increase ball speed"}
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-center gap-4 group">
+                                        <div className="p-2 shrink-0 bg-slate-50 dark:bg-white/5 rounded-xl transition-transform group-hover:scale-110 border border-slate-100 dark:border-transparent">
+                                            <img src={item.img} alt="power-up icon" className="w-8 h-8 object-contain" />
+                                        </div>
+                                        <span className="text-slate-900 dark:text-slate-200 text-sm font-bold leading-tight">
+                                            {item.text}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
