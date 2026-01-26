@@ -20,8 +20,8 @@ export default function Home() {
                         <a href="https://github.com/Sweekt" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-yellow-600 dark:hover:text-yellow-500"><GitHubLogoIcon width={30} height={30}/></a>
                     </h1>
                 </div>
-                <div className="flex-1 h-full flex items-center">
-                    <img src={mePic} alt={'mePic'} className="border-rounded h-2/5 object-cover rounded-full shadow-2xl shadow-neutral-950 dark:shadow-neutral-950" />
+                <div className="flex-1 h-full flex items-center mr-32">
+                    <img src={mePic} alt={'mePic'} className="aspect-square shrink-0 h-2/5 object-cover rounded-full shadow-2xl shadow-neutral-950" />
                 </div>
             </div>
         </motion.section>

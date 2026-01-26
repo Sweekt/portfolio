@@ -18,22 +18,26 @@ const NAV_SECTIONS = [
 ];
 
 export default function NavigationBar() {
-    // Gestion du Dark Mode
     const [dark, setDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
     useEffect(() => {
         document.documentElement.classList.toggle('dark', dark);
     }, [dark]);
-
-    // On récupère la location actuelle (pathname + hash)
     const location = useLocation();
 
-    // Fonction helper pour vérifier si un lien est actif
-    const isSectionActive = (sectionId: string) => {
-        // Cas spécial pour la page d'accueil sans hash
-        if (sectionId === 'home' && location.pathname === '/' && !location.hash) return true;
+    const [activeHash, setActiveHash] = useState(window.location.hash);
 
-        // Vérifie si on est sur la home '/' ET que le hash correspond (ex: #projects)
-        return location.pathname === '/' && location.hash === `#${sectionId}`;
+    useEffect(() => {
+        const handleHashChange = () => {
+            setActiveHash(window.location.hash);
+        };
+
+        window.addEventListener("hashchange", handleHashChange);
+        return () => window.removeEventListener("hashchange", handleHashChange);
+    }, []);
+
+    const isSectionActive = (sectionId: string) => {
+        if (sectionId === 'home' && location.pathname === '/' && (!activeHash || activeHash === '#home')) return true;
+        return location.pathname === '/' && activeHash === `#${sectionId}`;
     };
 
     function Element(id: string, name: string) {

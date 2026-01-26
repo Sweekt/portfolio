@@ -1,51 +1,100 @@
 import { motion } from 'framer-motion';
-import {NavLink} from "react-router-dom";
-import {
-    Card,
-    CardAction,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "../components/Card"
+import { NavLink } from "react-router-dom";
+import { Gamepad2 } from 'lucide-react';
 import pongIcon from '../assets/pongIcon.png';
 import tdIcon from '../assets/tdIcon.png';
+import smIcon from '../assets/smIcon.png';
 
 export default function Projects() {
+    const projects = [
+        {
+            id: 'Pong',
+            title: 'Pong Game',
+            description: 'Classic pong game with local play',
+            icon: pongIcon,
+            lucide: <Gamepad2 size={20} />,
+            tech: ['TypeScript', 'Canvas API', 'WebSocket'],
+            content: 'Use your paddle to send back the ball and score points. First to 6 wins! Built for the 42 Common Core.',
+            path: '/projects/Pong'
+        },
+        {
+            id: 'Tower Defense',
+            title: 'Slime Defender',
+            description: '1 versus 1 tower defense game',
+            icon: tdIcon,
+            lucide: <Gamepad2 size={20} />,
+            tech: ['TypeScript', 'Canvas API', 'WebSocket'],
+            content: 'Use mana to create towers, defeat slimes and survive longer than your opponent! A competitive multiplayer challenge.',
+            path: '/projects/TowerDefense'
+        },
+        {
+            id: 'JRPG',
+            title: 'Silver Moon',
+            description: 'Classic JRPG with charming pixel-art',
+            icon: smIcon,
+            lucide: <Gamepad2 size={20} />,
+            tech: ['Unity', 'C#'],
+            content: 'Meet new people, collect powerful spells and accomplish quests to unveil mysteries of Hyward. Currently work in project.',
+            path: '/projects/TowerDefense'
+        }
+    ];
+
     return (
         <motion.section
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
+            className="mx-32 py-20 px-6 lg:px-16"
         >
-            <div className="py-32 flex justify-center items-stretch gap-12">
-                <NavLink to="/projects/Pong">
-                    <Card className="flex-1 max-w-sm">
-                        <img src={pongIcon}></img>
-                        <CardHeader>
-                            <CardTitle>Pong</CardTitle>
-                            <CardDescription>Classic pong game with local play</CardDescription>
-                        </CardHeader>
-                        <CardContent className="text-justify">
-                            <p className="pb-2">Use your paddle to send back the ball and score points if you opponent miss it. First to 6 wins !</p>
-                            <p>Project made for Transcendence from 42 common-core</p>
-                        </CardContent>
-                    </Card>
-                </NavLink>
-                <NavLink to="/projects/TowerDefense">
-                    <Card className="flex-1 max-w-sm">
-                        <img src={tdIcon}></img>
-                        <CardHeader>
-                            <CardTitle>Slime Defender</CardTitle>
-                            <CardDescription>1 versus 1 tower defense game</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="pb-2">Use mana to create towers, defeat slimes and survive longer than your opponent!</p>
-                            <p>Project made for Transcendence from 42 common-core</p>
-                        </CardContent>
-                    </Card>
-                </NavLink>
+            <div className="mb-16">
+                <h2 className="text-4xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter flex items-center gap-4">
+                    <span className="h-1 flex-1 bg-gradient-to-r from-transparent to-purple-600 rounded-full opacity-20"></span>
+                    Projects
+                </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mx-auto max-w-7xl">
+                {projects.map((project) => (
+                    <NavLink to={project.path} key={project.id} className="group">
+                        <div className="h-full bg-white dark:bg-purple-950/30 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 transition-all duration-300 group-hover:border-purple-500/50 group-hover:-tranneutral-y-2">
+
+                            <div className="relative h-48 overflow-hidden bg-neutral-900">
+                                <img
+                                    src={project.icon}
+                                    alt={project.title}
+                                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/30 to-transparent" />
+                                <div className="absolute bottom-4 left-6 flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm">
+                                    {project.lucide}
+                                    {project.id}
+                                </div>
+                            </div>
+
+                            <div className="p-8 space-y-4">
+                                <div className="flex justify-between items-start">
+                                    <h3 className="text-2xl font-black text-neutral-950 dark:text-white">
+                                        {project.title}
+                                    </h3>
+                                </div>
+                                <p className="text-sm font-semibold italic text-neutral-500 mb-2">
+                                    {project.description}
+                                </p>
+                                <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                                    {project.content}
+                                </p>
+
+                                <div className="flex flex-wrap gap-2 pt-4">
+                                    {project.tech.map((t) => (
+                                        <span key={t} className="px-3 py-1 bg-purple-50 dark:bg-white/5 border border-purple-100 dark:border-white/10 rounded-full text-[10px] font-black uppercase tracking-tighter text-purple-700 dark:text-purple-400">
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </NavLink>
+                ))}
             </div>
         </motion.section>
     );
