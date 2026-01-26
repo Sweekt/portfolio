@@ -27,7 +27,8 @@ export default function Projects() {
                             <CardTitle>Pong</CardTitle>
                             <CardDescription>Classic pong game with local play</CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="text-justify">
+                            <p className="pb-2">Use your paddle to send back the ball and score points if you opponent miss it. First to 6 wins !</p>
                             <p>Project made for Transcendence from 42 common-core</p>
                         </CardContent>
                     </Card>
@@ -40,6 +41,7 @@ export default function Projects() {
                             <CardDescription>1 versus 1 tower defense game</CardDescription>
                         </CardHeader>
                         <CardContent>
+                            <p className="pb-2">Use mana to create towers, defeat slimes and survive longer than your opponent!</p>
                             <p>Project made for Transcendence from 42 common-core</p>
                         </CardContent>
                     </Card>
