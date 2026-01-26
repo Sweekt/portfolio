@@ -29,7 +29,7 @@ export default function Pong() {
             transition={{ duration: 0.4 }}
             className="w-full flex flex-col items-center pt-6 pb-12 px-4"
         >
-            <div className="w-full grid grid-cols-1 2xl:grid-cols-[1fr_auto_1fr] gap-10 items-start">
+            <div className="w-full grid grid-cols-1 2xl:grid-cols-[1fr_auto_1fr] gap-6 items-start">
                 <div className="hidden 2xl:block"></div>
                 <div className="flex justify-center items-center">
                     <canvas
