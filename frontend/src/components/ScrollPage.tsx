@@ -17,7 +17,7 @@ const smoothScroll = (id: string) => {
     }
 };
 
-export default function ScrollPage({ dark, setDark }: ScrollPageProps) {
+export default function ScrollPage({ _dark, _setDark }: ScrollPageProps) {
     const location = useLocation();
 
     useEffect(() => {
