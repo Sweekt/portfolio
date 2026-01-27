@@ -47,12 +47,10 @@ export default function NavigationBar() {
                         <NavLink
                             to={`/#${id}`}
                             className={cn(
-                                // Vos styles personnalisés de base
                                 "font-semibold bg-transparent hover:bg-transparent hover:text-hover data-[active]:bg-transparent focus:bg-transparent text-bold hover:text-yellow-600 dark:hover:text-yellow-500",
-                                // Le style CONDITIONNEL si actif
                                 isSectionActive(id)
-                                    ? "text-purple-800" // Style Actif
-                                    : "text-neutral-950 dark:text-neutral-50" // Style Inactif par défaut
+                                    ? "text-purple-800"
+                                    : "text-neutral-950 dark:text-neutral-50"
                             )}
                         >
                             {name}
@@ -69,12 +67,10 @@ export default function NavigationBar() {
                         <NavLink
                             to={`/#${id}`}
                             className={cn(
-                                // Vos styles personnalisés de base
                                 "font-semibold bg-transparent hover:bg-transparent data-[active]:bg-transparent focus:bg-transparent hover:text-yellow-600 dark:hover:text-yellow-500",
-                                // Le style CONDITIONNEL si actif
                                 isSectionActive(id)
-                                    ? "text-purple-800" // Style Actif
-                                    : "text-neutral-950 dark:text-neutral-50" // Style Inactif par défaut
+                                    ? "text-purple-800"
+                                    : "text-neutral-950 dark:text-neutral-50"
                             )}
                         >
                             {name}
@@ -106,7 +102,7 @@ export default function NavigationBar() {
             <nav className="flex-1 gap-8 text-xl items-center">
                 <NavigationMenu>
                     <NavigationMenuList>
-                        {NAV_SECTIONS.map((section, i) => (Element(section.id, section.name)))}
+                        {NAV_SECTIONS.map((section, _i) => (Element(section.id, section.name)))}
                     </NavigationMenuList>
                 </NavigationMenu>
             </nav>
