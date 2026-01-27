@@ -27,7 +27,7 @@ export default function Contact() {
                 alert("Oups ! Unexpected error.");
             }
         } catch (error) {
-            alert("Erreur réseau. Vérifie ta connexion.");
+            alert("Network error. Check your connection.");
         } finally {
             setIsLoading(false);
         }
@@ -122,7 +122,7 @@ export default function Contact() {
                                 className="py-12 text-center space-y-6"
                             >
                                 <div className="flex justify-center">
-                                    <div className="p-4 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-full">
+                                    <div className="p-4 bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-full">
                                         <CheckCircle2 size={48} />
                                     </div>
                                 </div>

@@ -12,7 +12,7 @@ export default function Home() {
             <div className="flex h-screen">
                 <div className="flex-2 mb-4 flex flex-col justify-center pl-32">
                     <h2 className="text-6xl font-semibold">Benjamin <span className="text-purple-800 font-bold">"Sweek"</span> Roy</h2><br/>
-                    <h1 className="text-2xl font-medium">Student at 42 Lyon.
+                    <h1 className="text-2xl font-medium">42 Lyon student.
                     <span className="text-2xl font-light"> Software developper with a creative touch.</span>
                     </h1>
                     <h1 className="flex -ml-4 pt-6">

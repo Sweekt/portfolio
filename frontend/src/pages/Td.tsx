@@ -50,7 +50,11 @@ export default function TowerDefense() {
                                 <Gamepad2 size={20} strokeWidth={2.5} />
                                 About the Game
                             </h3>
-                            <span className="text-neutral-950 dark:text-neutral-200 text-sm font-bold">Use mana to create towers, defeat slimes and survive longer than your opponent!</span>
+                            <span className="text-neutral-950 dark:text-neutral-200 text-sm font-bold">
+                                Create your deck by selecting five rocks. Each rock is unique, choose wisely !<br/>
+                                Use mana to upgrade rocks or spawn new ones.<br/>
+                                Defeat vicious slimes and outlast your opponent!
+                            </span>
                         </div>
                         <div className="space-y-6">
                             <h3 className="text-sm font-black text-purple-800 dark:text-purple-400 flex items-center gap-2 uppercase tracking-widest">
@@ -59,9 +63,9 @@ export default function TowerDefense() {
                             </h3>
                             <div className="space-y-4">
                                 {[
-                                    { img: mana, text: "Available mana, you gain it with time or by killing slimes"},
-                                    { img: addTower, text: "Spawn a random tower, cost goes up everytime"},
-                                    { img: slime, text: "Defeating a slime will spawn one for your opponent"}
+                                    { img: mana, text: "Available mana, obtained over time or by killing slimes"},
+                                    { img: addTower, text: "Spawn a random tower from your deck, cost goes up each time"},
+                                    { img: slime, text: "Defeat a slime to make one spawn for your opponent"}
                                 ].map((item, i) => (
                                     <div key={i} className="flex items-center gap-4 group">
                                         <div className="p-2 shrink-0 bg-neutral-50 dark:bg-white/5 rounded-xl transition-transform group-hover:scale-110 border border-neutral-100 dark:border-transparent">

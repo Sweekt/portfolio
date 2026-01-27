@@ -20,7 +20,7 @@ export default function Experiences() {
                 {/* --- SCHOOL --- */}
                 <div className="bg-white dark:bg-purple-950/30 p-8 rounded-3xl border-2 border-neutral-100 dark:border-white/10 shadow-xl shadow-purple-900/5 transition-all hover:border-purple-200 dark:hover:border-purple-500/30">
                     <div className="flex items-center gap-4 mb-8">
-                        <div className="p-3 bg-purple-100 dark:bg-purple-500/20 rounded-2xl text-purple-600 dark:text-purple-400">
+                        <div className="p-3 bg-yellow-100 dark:bg-yellow-500/20 rounded-2xl text-yellow-600 dark:text-yellow-400">
                             <GraduationCap size={32} />
                         </div>
                         <h3 className="text-2xl font-bold text-neutral-900 dark:text-white">School</h3>
@@ -36,9 +36,9 @@ export default function Experiences() {
                                 <span className="flex items-center gap-1"><MapPin size={14}/> Charbonnière-les-bains, France</span>
                             </div>
                             <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed">
-                                <li>• Learning of <b>C</b>, <b>C++</b> and <b>Typescript</b></li>
-                                <li>• Discovering and learning of <b>Unity</b> and <b>Godot</b></li>
-                                <li>• In-depth <b>algorithm</b> mastering</li>
+                                <li>• Acquirement of <b>C</b>, <b>C++</b> and <b>Typescript</b></li>
+                                <li>• Discovering and studying of <b>Unity</b> and <b>Godot</b></li>
+                                <li>• Advancing <b>algorithm</b> knowledge</li>
                                 <li>• Introduction to <b>Docker</b> and <b>Git</b></li>
                                 <li>• Event animation as Students' Union president</li>
                             </ul>
@@ -63,7 +63,7 @@ export default function Experiences() {
                 {/* --- PROFESSIONAL --- */}
                 <div className="bg-white dark:bg-purple-950/30 p-8 rounded-3xl border-2 border-neutral-100 dark:border-white/10 shadow-xl shadow-purple-900/5 transition-all hover:border-purple-200 dark:hover:border-purple-500/30">
                     <div className="flex items-center gap-4 mb-8">
-                        <div className="p-3 bg-blue-100 dark:bg-blue-500/20 rounded-2xl text-blue-600 dark:text-blue-400">
+                        <div className="p-3 bg-yellow-100 dark:bg-yellow-500/20 rounded-2xl text-yellow-600 dark:text-yellow-400">
                             <Briefcase size={32} />
                         </div>
                         <h3 className="text-2xl font-bold text-neutral-900 dark:text-white">Professional</h3>
@@ -79,7 +79,7 @@ export default function Experiences() {
                             </div>
                             <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed">
                                 <li>• <b>Introduction</b> and <b>initiation</b> to Disney's trading card game, <b>Lorcana</b></li>
-                                <li>• <b>Team management</b> during events</li>
+                                <li>• <b>Team management</b> at events</li>
                             </ul>
                         </div>
                         <div className="relative pl-6 border-l-2 border-purple-200 dark:border-purple-800">
@@ -91,10 +91,10 @@ export default function Experiences() {
                                 <span className="flex items-center gap-1"><MapPin size={14}/> Lyon, France</span>
                             </div>
                             <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed">
-                                <li>• Complete business <b>creation</b></li>
-                                <li>• Management of <b>communication</b> across various channels</li>
-                                <li>• <b>Creation</b> and <b>organization</b> of multiple events (tournaments, trivia quizzes, etc.)</li>
-                                <li>• Management of the company's <b>accounting</b> and <b>HR</b></li>
+                                <li>• Entire business <b>creation</b></li>
+                                <li>• <b>Communication</b> through diverse medias</li>
+                                <li>• <b>Creation</b> and <b>organization</b> of various events (tournaments, trivia quizzes, etc.)</li>
+                                <li>• Running of the company's <b>accounting</b> and <b>HR</b></li>
                             </ul>
                         </div>
                         <div className="relative pl-6 border-l-2 border-purple-200 dark:border-purple-800">
@@ -106,11 +106,11 @@ export default function Experiences() {
                                 <span className="flex items-center gap-1"><MapPin size={14}/> Saint-Priest, France</span>
                             </div>
                             <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed">
-                                <li>• <b>Designing</b> of various plastic parts</li>
+                                <li>• <b>Designing</b> of plastic parts</li>
                                 <li>• Creation of documentation compiling the different truck parts</li>
-                                <li>• Facilitating meetings with various stakeholders within the same working group</li>
+                                <li>• Helding of meetings with various stakeholders within the same working group</li>
                                 <li>• <b>Prototyping</b> and <b>stress</b> testing of mechanical parts</li>
-                                <li>• Completing a 3-month internship at Mack in North Carolina (USA)</li>
+                                <li>• Completing a 3-month internship at Mack, North Carolina, USA</li>
                             </ul>
                         </div>
                     </div>
