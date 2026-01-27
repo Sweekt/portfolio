@@ -10,7 +10,6 @@ import {
 import {cn} from "../lib/utils.tsx";
 import {GitHubLogoIcon, LinkedInLogoIcon} from "@radix-ui/react-icons"
 
-// --- Définition des sections pour la navigation (pour l'utiliser dans le header) ---
 const NAV_SECTIONS = [
     { name: 'Experiences', id: 'experiences' },
     { name: 'Projects', id: 'projects' },
@@ -104,7 +103,6 @@ export default function NavigationBar() {
 
     return (
         <header className="flex justify-between items-center border-b-2 border-purple-800 sticky top-0 z-10 bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300 px-4 p-4">
-            {/* Lien Logo */}
             <nav className="flex-1 gap-8 text-xl items-center">
                 <NavigationMenu>
                     <NavigationMenuList>
@@ -125,6 +123,5 @@ export default function NavigationBar() {
                 </button>
             </nav>
         </header>
-
     );
 }

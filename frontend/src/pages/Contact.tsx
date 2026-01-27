@@ -24,8 +24,7 @@ export default function Contact() {
             if (response.ok) {
                 setIsSubmitted(true);
             } else {
-                // Optionnel : gérer les erreurs ici (ex: captcha, limite de messages)
-                alert("Oups ! Il y a eu un problème lors de l'envoi.");
+                alert("Oups ! Unexpected error.");
             }
         } catch (error) {
             alert("Erreur réseau. Vérifie ta connexion.");
