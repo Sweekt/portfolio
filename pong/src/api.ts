@@ -255,6 +255,10 @@ export const INTERNAL_PASSWORD = process.env?.SECRET_KEY;
 
 const fastify = Fastify();
 
+fastify.get('/health', async () => {
+	return { status: 'ok' };
+});
+
 fastify.register(fastifyWebsocket);
 
 fastify.register(pongRoutes);

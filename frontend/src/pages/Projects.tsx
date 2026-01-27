@@ -1,11 +1,43 @@
 import { motion } from 'framer-motion';
 import { NavLink } from "react-router-dom";
 import { Gamepad2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import pongIcon from '../assets/pongIcon.png';
 import tdIcon from '../assets/tdIcon.png';
 import smIcon from '../assets/smIcon.png';
 
+interface ProjectStatus {
+    [key: string]: boolean;
+}
+
 export default function Projects() {
+    const [status, setStatus] = useState<ProjectStatus>({
+        'Pong': false,
+        'Tower Defense': false,
+        'JRPG': false
+    });
+
+    useEffect(() => {
+        const checkHealth = async (id: string, url: string) => {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    setStatus(prev => ({ ...prev, [id]: true }));
+                }
+            } catch (e) {
+                setStatus(prev => ({ ...prev, [id]: false }));
+            }
+        };
+
+        checkHealth('Pong', '/pong-ws/health');
+        checkHealth('Tower Defense', '/tower-ws/health');
+    }, []);
+
     const projects = [
         {
             id: 'Pong',
@@ -54,47 +86,47 @@ export default function Projects() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mx-auto max-w-7xl">
-                {projects.map((project) => (
-                    <NavLink to={project.path} key={project.id} className="group">
-                        <div className="h-full bg-white dark:bg-purple-950/30 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 transition-all duration-300 group-hover:border-purple-500/50 group-hover:-tranneutral-y-2">
+                {projects.map((project) => {
+                    const isOnline = status[project.id as keyof typeof status];
 
-                            <div className="relative h-48 overflow-hidden bg-neutral-900">
-                                <img
-                                    src={project.icon}
-                                    alt={project.title}
-                                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/30 to-transparent" />
-                                <div className="absolute bottom-4 left-6 flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm">
-                                    {project.lucide}
-                                    {project.id}
+                    return (
+                        <NavLink to={isOnline ? project.path : "#"} key={project.id} className={`group ${!isOnline ? 'cursor-default' : ''}`} onClick={(e) => !isOnline && e.preventDefault()}>
+                            <div className={`h-full bg-white dark:bg-purple-950/30 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 transition-all duration-300 group-hover:border-purple-500/50 group-hover:-tranneutral-y-2 ${!isOnline ? 'opacity-70' : ''}`}>
+                                <div className="relative h-48 overflow-hidden bg-neutral-900">
+                                    <img src={project.icon} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
+                                    <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
+                                        <span className={`h-2 w-2 rounded-full animate-pulse ${isOnline ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`}></span>
+                                        <span className="text-[10px] font-bold text-white uppercase">{isOnline ? 'Up' : 'Unavailable'}</span>
+                                    </div>
+                                    <div className="absolute bottom-4 left-6 flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm">
+                                        {project.lucide} {project.id}
+                                    </div>
                                 </div>
-                            </div>
+                                <div className="p-8 space-y-4">
+                                    <div className="flex justify-between items-start">
+                                        <h3 className="text-2xl font-black text-neutral-950 dark:text-white">
+                                            {project.title}
+                                        </h3>
+                                    </div>
+                                    <p className="text-sm font-semibold italic text-neutral-500 mb-2">
+                                        {project.description}
+                                    </p>
+                                    <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                                        {project.content}
+                                    </p>
 
-                            <div className="p-8 space-y-4">
-                                <div className="flex justify-between items-start">
-                                    <h3 className="text-2xl font-black text-neutral-950 dark:text-white">
-                                        {project.title}
-                                    </h3>
-                                </div>
-                                <p className="text-sm font-semibold italic text-neutral-500 mb-2">
-                                    {project.description}
-                                </p>
-                                <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-                                    {project.content}
-                                </p>
-
-                                <div className="flex flex-wrap gap-2 pt-4">
-                                    {project.tech.map((t) => (
-                                        <span key={t} className="px-3 py-1 bg-purple-50 dark:bg-white/5 border border-purple-100 dark:border-white/10 rounded-full text-[10px] font-black uppercase tracking-tighter text-purple-700 dark:text-purple-400">
+                                    <div className="flex flex-wrap gap-2 pt-4">
+                                        {project.tech.map((t) => (
+                                            <span key={t} className="px-3 py-1 bg-purple-50 dark:bg-white/5 border border-purple-100 dark:border-white/10 rounded-full text-[10px] font-black uppercase tracking-tighter text-purple-700 dark:text-purple-400">
                                             {t}
                                         </span>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </NavLink>
-                ))}
+                        </NavLink>
+                    );
+                })}
             </div>
         </motion.section>
     );

@@ -231,5 +231,4 @@ export default async function pongRoutes(fastify: FastifyInstance) {
 			return res.status(400).send({error: err});
 		}
 	});
-
 }

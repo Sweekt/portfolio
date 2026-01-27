@@ -545,6 +545,10 @@ async function roomLoop(room: RoomTd) {
 
 export const INTERNAL_PASSWORD = process.env?.SECRET_KEY;
 
+fastify.get('/health', async () => {
+    return { status: 'ok' };
+});
+
 fastify.register(fastifyWebsocket);
 
 fastify.register(async function (fastify) {
