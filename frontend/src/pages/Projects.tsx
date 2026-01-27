@@ -26,16 +26,18 @@ export default function Projects() {
                 const response = await fetch(url, { signal: controller.signal });
                 clearTimeout(timeoutId);
 
-                if (response.ok) {
-                    setStatus(prev => ({ ...prev, [id]: true }));
-                }
+                setStatus(prev => ({ ...prev, [id]: response.ok }));
             } catch (e) {
                 setStatus(prev => ({ ...prev, [id]: false }));
             }
         };
-
-        checkHealth('Pong', '/pong-ws/health');
-        checkHealth('Tower Defense', '/tower-ws/health');
+        const fetchAllHealth = () => {
+            checkHealth('Pong', '/pong-ws/health');
+            checkHealth('Tower Defense', '/tower-ws/health');
+        };
+        fetchAllHealth();
+        const interval = setInterval(fetchAllHealth, 30000);
+        return () => clearInterval(interval);
     }, []);
 
     const projects = [
@@ -93,7 +95,7 @@ export default function Projects() {
                         <NavLink to={isOnline ? project.path : "#"} key={project.id} className={`group ${!isOnline ? 'cursor-default' : ''}`} onClick={(e) => !isOnline && e.preventDefault()}>
                             <div className={`h-full bg-white dark:bg-purple-950/30 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 transition-all duration-300 group-hover:border-purple-500/50 group-hover:-tranneutral-y-2 ${!isOnline ? 'opacity-70' : ''}`}>
                                 <div className="relative h-48 overflow-hidden bg-neutral-900">
-                                    <img src={project.icon} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
+                                    <img src={project.icon} alt={project.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
                                     <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
                                         <span className={`h-2 w-2 rounded-full animate-pulse ${isOnline ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`}></span>
                                         <span className="text-[10px] font-bold text-white uppercase">{isOnline ? 'Up' : 'Unavailable'}</span>
