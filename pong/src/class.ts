@@ -1,6 +1,6 @@
-import {fetchPlayerWin, updateMmr} from "./utils.js";
-import {insertMatchResult} from "./database.js";
-import {resetHazard} from "./api.js";
+// import {fetchPlayerWin, updateMmr} from "./utils.js";
+// import {insertMatchResult} from "./database.js";
+// import {resetHazard} from "./api.js";
 import { WebSocket } from "ws";
 
 export class Ball {

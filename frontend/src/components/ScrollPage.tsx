@@ -5,11 +5,6 @@ import Projects from '../pages/Projects';
 import Contact from '../pages/Contact';
 import Experiences from '../pages/Experiences';
 
-interface ScrollPageProps {
-    dark: boolean;
-    setDark: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 const smoothScroll = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
@@ -17,7 +12,7 @@ const smoothScroll = (id: string) => {
     }
 };
 
-export default function ScrollPage({ _dark, _setDark }: ScrollPageProps) {
+export default function ScrollPage() {
     const location = useLocation();
 
     useEffect(() => {

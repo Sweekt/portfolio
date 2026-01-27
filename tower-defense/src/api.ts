@@ -548,7 +548,7 @@ export const INTERNAL_PASSWORD = process.env?.SECRET_KEY;
 fastify.register(fastifyWebsocket);
 
 fastify.register(async function (fastify) {
-    fastify.get('/ws', {websocket: true}, (socket, req) => {
+    fastify.get('/ws', {websocket: true}, (socket, _req) => {
         console.log("Client connected");
         let init = false;
         let room: number = -1;
@@ -643,7 +643,7 @@ fastify.register(async function (fastify) {
 
 fastify.register(tdRoutes);
 
-fastify.listen({ port: 2246, host: '0.0.0.0' }, (err, adrr) => {
+fastify.listen({ port: 3001, host: '0.0.0.0' }, (err, adrr) => {
     if (err) {
         console.error(err);
         process.exit(1);

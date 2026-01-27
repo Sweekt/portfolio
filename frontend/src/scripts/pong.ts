@@ -77,6 +77,10 @@ class Assets {
 }
 
 let pongConnect: boolean
+const isProd = import.meta.env.PROD;
+const socketUrl = isProd
+	? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/pong-ws/`
+	: `ws://localhost:3000/ws`;
 
 export function pongGame(canvas: HTMLCanvasElement, mode: string, room?: number) {
 	if (!room)
@@ -364,7 +368,7 @@ export function pongGame(canvas: HTMLCanvasElement, mode: string, room?: number)
 	}
 
 	try {
-		const socket = new WebSocket(`ws://localhost:8080/ws`)
+		const socket = new WebSocket(socketUrl)
 		const keyUpHandler = createKeyUpHandler(socket)
 		const keyDownHandler = createKeyDownHandler(socket, game, mode)
 		pongConnect = true

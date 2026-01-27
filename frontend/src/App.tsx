@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, NavLink, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ScrollPage from './components/ScrollPage.tsx'; // Contient maintenant UNIQUEMENT les sections
 import Pong from './pages/Pong';
 import TowerDefense from './pages/Td.tsx'

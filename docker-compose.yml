@@ -1,0 +1,27 @@
+services:
+  # Jeu Pong
+  pong-api:
+    build: ./pong
+    container_name: pong_api
+    volumes:
+      - ./pong/data:/app/data
+    restart: always
+
+  # Jeu Tower-Defense
+  tower-api:
+    build: ./tower-defense
+    container_name: tower_api
+    volumes:
+      - ./tower-defense/data:/app/data
+    restart: always
+
+  # Frontend (Portfolio)
+  frontend:
+    build: ./frontend
+    container_name: portfolio_front
+    ports:
+      - "8080:80"
+    depends_on:
+      - pong-api
+      - tower-api
+    restart: always

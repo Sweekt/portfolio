@@ -9,7 +9,6 @@ import {
 	readySchema,
 	resetInput,
 } from "./api.js";
-import { WebSocket } from "ws";
 import { Player } from "./class.js"
 import {getMatchHistory, MatchResult} from "./database.js"
 import {soloMode} from "./solo.js";
@@ -32,7 +31,7 @@ const internalVerification = async (req: FastifyRequest) => {
 }
 
 export default async function pongRoutes(fastify: FastifyInstance) {
-	fastify.get('/ws', { websocket: true }, (socket, req) => {
+	fastify.get('/ws', { websocket: true }, (socket, _req) => {
 		console.log("Client connected");
 		const userId = generateId();
 		const player = new Player(userId, socket);

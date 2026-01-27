@@ -149,6 +149,10 @@ export class AssetsTd {
 }
 
 export let tdConnect: boolean;
+const isProd = import.meta.env.PROD;
+const socketUrl = isProd
+    ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/tower-ws/`
+    : `ws://localhost:3001/ws`;
 
 // Main function
 export function tdGame(canvasTd: HTMLCanvasElement, room?: number) {
@@ -501,7 +505,7 @@ export function tdGame(canvasTd: HTMLCanvasElement, room?: number) {
         });
     }
 
-    function drawGrid() {
+    /*function drawGrid() {
         let sq = true;
         for (let i = 0; i < canvasTd.width; i += tile) {
             let j = 0;
@@ -530,7 +534,7 @@ export function tdGame(canvasTd: HTMLCanvasElement, room?: number) {
         ctxTd.fillRect(0, tile * 7.5, tile, tile);
         ctxTd.fillStyle = "green";
         ctxTd.fillRect(tile, tile * 2, tile * 4, tile * 5);
-    }
+    }*/
 
     function drawGameTd() {
         ctxTd.drawImage(assetsTd.getImage(`map${nmap}`)!, 0, 0, canvasTd.width, canvasTd.height);
@@ -682,7 +686,7 @@ export function tdGame(canvasTd: HTMLCanvasElement, room?: number) {
     }
 
     try {
-        const socketTd = new WebSocket("ws://localhost:2246/ws");
+        const socketTd = new WebSocket(socketUrl);
         tdConnect = true;
         socketTd.onopen = function () {
             socketTd.send(JSON.stringify({event: "socketInit", nick: nick, room: room}));
