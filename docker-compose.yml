@@ -1,21 +1,23 @@
 services:
-  # Jeu Pong
+  # Pong
   pong-api:
     build: ./pong
     container_name: pong_api
     volumes:
       - ./pong/data:/app/data
+    networks: [app-network]
     restart: always
 
-  # Jeu Tower-Defense
+  # Tower-Defense
   tower-api:
     build: ./tower-defense
     container_name: tower_api
     volumes:
       - ./tower-defense/data:/app/data
+    networks: [app-network]
     restart: always
 
-  # Frontend (Portfolio)
+  # Frontend
   frontend:
     build: ./frontend
     container_name: portfolio_front
@@ -24,4 +26,47 @@ services:
     depends_on:
       - pong-api
       - tower-api
+    networks: [app-network]
     restart: always
+
+  # Monitoring
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.external-url=http://localhost:8080/prometheus/' # <--- Indique à Prometheus son chemin web
+    networks: [app-network]
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    user: "0"
+    volumes:
+      # On lie tes dossiers locaux aux dossiers de config de Grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      # On garde quand même un volume pour les données persistantes (sessions, etc.)
+      - ./grafana_data:/var/lib/grafana
+    networks: [app-network]
+    environment:
+      - GF_SERVER_ROOT_URL=http://localhost:8080/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    restart: always
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks: [app-network]
+
+networks:
+  app-network:
+    driver: bridge
