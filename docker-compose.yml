@@ -22,7 +22,7 @@ services:
     build: ./frontend
     container_name: portfolio_front
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - pong-api
       - tower-api
@@ -38,7 +38,7 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
-      - '--web.external-url=http://localhost:8080/prometheus/' # <--- Indique à Prometheus son chemin web
+      - '--web.external-url=http://sweek.ovh/prometheus/' # <--- Indique à Prometheus son chemin web
     networks: [app-network]
 
   grafana:
@@ -53,7 +53,7 @@ services:
       - ./grafana_data:/var/lib/grafana
     networks: [app-network]
     environment:
-      - GF_SERVER_ROOT_URL=http://localhost:8080/grafana/
+      - GF_SERVER_ROOT_URL=http://sweek.ovh/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     restart: always
 
