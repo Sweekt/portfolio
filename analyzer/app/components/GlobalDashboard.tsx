@@ -1,8 +1,6 @@
 ﻿import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 
-// Dashboard Global (Graphiques et stats globales)
-
 export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, chartMode, setChartMode }) => {
 	const currentChartData = chartMode === 'game' ? mmrHistory : mmrHistoryByDay;
 
@@ -21,34 +19,56 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 		return null;
 	};
 
+	const hasGames = globalStats.games > 0;
+	const hasOtpGames = globalStats.otpGames > 0;
+	const hasOtdGames = globalStats.otdGames > 0;
+
+	const winRate = hasGames ? ((globalStats.wins / globalStats.games) * 100).toFixed(1) : "0.0";
+	const playRateOtp = hasGames ? ((globalStats.otpGames / globalStats.games) * 100).toFixed(1) : "0.0";
+	const otpWinRate = hasOtpGames ? ((globalStats.otpWins / globalStats.otpGames) * 100).toFixed(1) : "0.0";
+	const otdWinRate = hasOtdGames ? ((globalStats.otdWins / globalStats.otdGames) * 100).toFixed(1) : "0.0";
+
+	// Détermine la couleur du winrate global
+	const winRateColor = !hasGames ? 'text-gray-400' : (globalStats.wins / globalStats.games >= 0.5 ? 'text-green-400' : 'text-red-400');
+
 	return (
 		<div className="mb-10 bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 p-6 flex flex-col lg:flex-row gap-8 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
 			<div className="w-full lg:w-1/3 flex flex-col justify-center">
 				<h2 className="text-xl font-bold mb-6 text-gray-200">Global Overview</h2>
+
+				{/* --- CARTES DE STATISTIQUES --- */}
 				<div className="grid grid-cols-2 gap-4">
+					{/* Overall Win Rate */}
 					<div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/50 hover:bg-gray-900 transition-colors">
 						<p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wide">Overall Win Rate</p>
-						<p className={`text-2xl font-bold ${globalStats.wins / globalStats.games >= 0.5 ? 'text-green-400' : 'text-red-400'}`}>
-							{((globalStats.wins / globalStats.games) * 100).toFixed(1)}%
+						<p className={`text-2xl font-bold ${winRateColor}`}>
+							{winRate}%
 						</p>
 						<p className="text-xs text-gray-500 mt-1">{globalStats.wins}W - {globalStats.games - globalStats.wins}L</p>
 					</div>
+
+					{/* Play Rate OTP */}
 					<div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/50 hover:bg-gray-900 transition-colors">
 						<p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wide">Play Rate (OTP)</p>
-						<p className="text-2xl font-bold text-blue-400">{((globalStats.otpGames / globalStats.games) * 100).toFixed(1)}%</p>
+						<p className="text-2xl font-bold text-blue-400">{playRateOtp}%</p>
 						<p className="text-xs text-gray-500 mt-1">Started {globalStats.otpGames} times</p>
 					</div>
+
+					{/* OTP Win Rate */}
 					<div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/50 hover:bg-gray-900 transition-colors">
 						<p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wide">OTP Win Rate</p>
-						<p className="text-2xl font-bold text-gray-200">{((globalStats.otpWins / globalStats.otpGames) * 100).toFixed(1)}%</p>
+						<p className="text-2xl font-bold text-gray-200">{otpWinRate}%</p>
 					</div>
+
+					{/* OTD Win Rate */}
 					<div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/50 hover:bg-gray-900 transition-colors">
 						<p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wide">OTD Win Rate</p>
-						<p className="text-2xl font-bold text-gray-200">{((globalStats.otdWins / globalStats.otdGames) * 100).toFixed(1)}%</p>
+						<p className="text-2xl font-bold text-gray-200">{otdWinRate}%</p>
 					</div>
 				</div>
 			</div>
 
+			{/* --- GRAPHIQUE MMR --- */}
 			<div className="w-full lg:w-2/3 h-72 bg-gray-900/40 rounded-xl border border-gray-700/50 p-4 flex flex-col">
 				<div className="flex justify-between items-center mb-4">
 					<h3 className="text-sm text-gray-400 font-medium uppercase tracking-wide">MMR Evolution</h3>
@@ -59,8 +79,9 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 						</div>
 					)}
 				</div>
+
 				{mmrHistory.length > 0 ? (
-					<div className="flex-grow w-full">
+					<div className="flex-grow w-full min-h-[200px]">
 						<ResponsiveContainer width="100%" height="100%">
 							<LineChart data={currentChartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
 								<CartesianGrid key="grid" strokeDasharray="3 3" stroke="#374151" vertical={false} />
@@ -72,7 +93,9 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 						</ResponsiveContainer>
 					</div>
 				) : (
-					<div className="flex-grow flex items-center justify-center text-gray-500">No MMR data available.</div>
+					<div className="flex-grow flex items-center justify-center text-gray-500 font-medium bg-gray-900/20 rounded-lg border border-gray-800 border-dashed">
+						No matches played in this queue yet.
+					</div>
 				)}
 			</div>
 		</div>
