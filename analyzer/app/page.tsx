@@ -143,8 +143,9 @@ export default function Home() {
 					)}
 				</div>
 
+				{/* Placeholder d'import (remplace l'ancienne div par celle-ci) */}
 				{!stats && !isProcessing && (
-					<div className="mt-20 p-12 border-2 border-dashed border-gray-700 rounded-3xl text-center bg-gray-800/40 hover:bg-gray-800/60 transition-all duration-500 max-w-3xl mx-auto animate-[scaleIn_0.5s_ease-out]">
+					<div className="w-full min-h-[400px] mt-10 p-12 border-2 border-dashed border-gray-700 rounded-3xl text-center bg-gray-800/40 hover:bg-gray-800/60 transition-all duration-500 flex flex-col items-center justify-center animate-[scaleIn_0.5s_ease-out]">
 						<div className="mb-6 text-gray-400">
 							<div className="w-20 h-20 mx-auto mb-6 bg-gray-900 rounded-full flex items-center justify-center shadow-inner border border-gray-700">
 								<svg className="w-10 h-10 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -158,11 +159,8 @@ export default function Home() {
 						<label htmlFor="fileInput" className="cursor-pointer bg-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 inline-block">
 							Select .csv file
 						</label>
-						<div className="mt-2">
-							<button
-								onClick={() => setIsHelpModalOpen(true)}
-								className="text-sm text-gray-500 hover:text-blue-400 underline transition-colors"
-							>
+						<div className="mt-4">
+							<button onClick={() => setIsHelpModalOpen(true)} className="text-sm text-gray-500 hover:text-blue-400 underline transition-colors">
 								Where do I find my .csv file?
 							</button>
 						</div>
