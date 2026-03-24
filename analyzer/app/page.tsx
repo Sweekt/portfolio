@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react'; // MODIFIÉ: Ajout de useEffect
+import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import { LoadingModal } from "./components/LoadingModal";
 import { DeckModal } from "./components/DeckModal";
@@ -122,7 +122,7 @@ export default function Home() {
 			{isHelpModalOpen && <HelpModal onClose={() => setIsHelpModalOpen(false)} />}
 			{selectedDeck && <DeckModal deck={selectedDeck} onClose={() => setSelectedDeck(null)} />}
 
-			<div className={`max-w-7xl mx-auto transition-all duration-500 ease-in-out ${(selectedDeck || isProcessing) ? 'blur-md opacity-40 scale-[0.98] pointer-events-none' : ''}`}>
+			<div className={`w-full max-w-7xl mx-auto transition-all duration-500 ease-in-out ${(selectedDeck || isProcessing) ? 'blur-md opacity-40 scale-[0.98] pointer-events-none' : ''}`}>
 
 				<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
 					<div className="flex items-center gap-3">
@@ -143,7 +143,7 @@ export default function Home() {
 					)}
 				</div>
 
-				{/* Placeholder d'import (remplace l'ancienne div par celle-ci) */}
+				{/* Placeholder d'import */}
 				{!stats && !isProcessing && (
 					<div className="w-full min-h-[400px] mt-10 p-12 border-2 border-dashed border-gray-700 rounded-3xl text-center bg-gray-800/40 hover:bg-gray-800/60 transition-all duration-500 flex flex-col items-center justify-center animate-[scaleIn_0.5s_ease-out]">
 						<div className="mb-6 text-gray-400">
