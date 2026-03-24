@@ -10,7 +10,8 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.myresolver.acme.email=benjamin.roy69@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
@@ -88,11 +89,9 @@ services:
     container_name: lorcana_analyzer
     labels:
       - "traefik.enable=true"
-      # On capte tout ce qui commence par /analyzer
       - "traefik.http.routers.analyzer.rule=Host(`sweek.ovh`) && PathPrefix(`/analyzer`)"
       - "traefik.http.routers.analyzer.entrypoints=websecure"
       - "traefik.http.routers.analyzer.tls.certresolver=myresolver"
-      # Next.js écoute sur le port 3000 par défaut
       - "traefik.http.services.analyzer.loadbalancer.server.port=3000"
     networks: [app-network]
     restart: always
