@@ -40,6 +40,7 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
+    user: "0" # <-- LE RETOUR DE L'UTILISATEUR ROOT (Indispensable pour les droits)
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.grafana.rule=Host(`sweek.ovh`) && PathPrefix(`/grafana`)"
@@ -51,7 +52,19 @@ services:
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - ./monitoring/grafana_data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana # <-- Le bon chemin d'origine !
+    networks: [app-network]
+    restart: always
+
+  # --- CADVISOR ---
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
     networks: [app-network]
     restart: always
 
