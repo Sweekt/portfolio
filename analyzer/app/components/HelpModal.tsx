@@ -31,7 +31,7 @@ export const HelpModal = ({ onClose }) => {
                     <div className="flex justify-center mb-2">
                         <div className="w-full max-w-md rounded-xl overflow-hidden border-2 border-gray-600 shadow-lg relative">
                             <img
-                                src="/export-tutorial.png"
+                                src="/analyzer/export-tutorial.png"
                                 alt="Screenshot of the export button"
                                 className="w-full h-auto object-cover"
                             />
