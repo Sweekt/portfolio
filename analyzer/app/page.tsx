@@ -1,17 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // MODIFIÉ: Ajout de useEffect
 import Papa from 'papaparse';
 import { LoadingModal } from "./components/LoadingModal";
 import { DeckModal } from "./components/DeckModal";
 import { GlobalDashboard } from "@/app/components/GlobalDashboard";
 import { DeckCard } from "@/app/components/DeckCard";
 import { LoreKeepersLogo } from "@/app/components/LoreKeepersLogo"
-import {Footer} from "@/app/components/Footer";
-import {HelpModal} from "@/app/components/HelpModal";
-
+import { Footer } from "@/app/components/Footer";
+import { HelpModal } from "@/app/components/HelpModal";
 
 export default function Home() {
+	// NOUVEAU: États pour stocker les données brutes et le filtre sélectionné
+	const [rawCsvData, setRawCsvData] = useState(null);
+	const [selectedQueue, setSelectedQueue] = useState('global');
+
 	const [stats, setStats] = useState(null);
 	const [globalStats, setGlobalStats] = useState(null);
 	const [mmrHistory, setMmrHistory] = useState([]);
@@ -32,21 +35,28 @@ export default function Home() {
 			dynamicTyping: true,
 			complete: (results) => {
 				setTimeout(() => {
-					processData(results.data);
+					setRawCsvData(results.data);
 					setIsProcessing(false);
 				}, 1200);
 			},
 		});
 	};
 
-	const processData = (data) => {
-		// ... (La logique de parsing n'a pas changé)
+	useEffect(() => {
+		if (!rawCsvData) return;
+
+		const filteredData = rawCsvData.filter(row => {
+			if (selectedQueue === 'global') return true;
+			if (!row.Queue) return false;
+			return row.Queue.toLowerCase().includes(selectedQueue);
+		});
+
 		const colorMap = {};
 		const global = { games: 0, wins: 0, otpGames: 0, otpWins: 0, otdGames: 0, otdWins: 0 };
 		const mmrData = [];
 		const dayMap = {};
 
-		const validRows = data.filter(row => row['My Colors'] && row['Result']);
+		const validRows = filteredData.filter(row => row['My Colors'] && row['Result']);
 		const sortedData = validRows.sort((a, b) => new Date(a['Started At']) - new Date(b['Started At']));
 
 		sortedData.forEach((row, index) => {
@@ -93,12 +103,11 @@ export default function Home() {
 		setGlobalStats(global);
 		setMmrHistory(mmrData);
 		setMmrHistoryByDay(mmrByDayArray);
-	};
+
+	}, [rawCsvData, selectedQueue]);
 
 	return (
 		<main className="flex flex-col p-8 bg-gray-900 text-white min-h-screen font-sans relative overflow-x-hidden">
-
-			{/* Définition des animations personnalisées CSS directement dans le JSX */}
 			<style dangerouslySetInnerHTML={{__html: `
             @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
             @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -110,22 +119,14 @@ export default function Home() {
             .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7280; }
           `}} />
 
-			{/* Modale de chargement */}
 			{isProcessing && <LoadingModal />}
-
-			{/* NOUVELLE MODALE D'AIDE */}
 			{isHelpModalOpen && <HelpModal onClose={() => setIsHelpModalOpen(false)} />}
-
-			{/* Modale de détails du deck */}
 			{selectedDeck && <DeckModal deck={selectedDeck} onClose={() => setSelectedDeck(null)} />}
 
-			{/* Contenu principal (flouté si une modale est ouverte) */}
 			<div className={`max-w-7xl mx-auto transition-all duration-500 ease-in-out ${(selectedDeck || isProcessing) ? 'blur-md opacity-40 scale-[0.98] pointer-events-none' : ''}`}>
 
-				{/* Header */}
 				<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
 					<div className="flex items-center gap-3">
-						{/* Icône de logo */}
 						<LoreKeepersLogo className="w-10 h-10 text-blue-500" />
 						<h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 tracking-tight">
 							Duels.ink Analyzer
@@ -143,7 +144,6 @@ export default function Home() {
 					)}
 				</div>
 
-				{/* Placeholder d'import (si pas encore de données) */}
 				{!stats && !isProcessing && (
 					<div className="mt-20 p-12 border-2 border-dashed border-gray-700 rounded-3xl text-center bg-gray-800/40 hover:bg-gray-800/60 transition-all duration-500 max-w-3xl mx-auto animate-[scaleIn_0.5s_ease-out]">
 						<div className="mb-6 text-gray-400">
@@ -170,9 +170,35 @@ export default function Home() {
 					</div>
 				)}
 
-				{/* Affichage des composants de Dashboard et Cartes */}
 				{stats && (
 					<>
+						<div className="flex gap-4 mb-6 animate-[fadeInUp_0.5s_ease-out]">
+							<button
+								onClick={() => setSelectedQueue('global')}
+								className={`px-5 py-2 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm ${
+									selectedQueue === 'global' ? 'bg-purple-600 text-white shadow-purple-500/50' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+								}`}
+							>
+								🌍 Global
+							</button>
+							<button
+								onClick={() => setSelectedQueue('set 11')}
+								className={`px-5 py-2 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm ${
+									selectedQueue === 'set 11' ? 'bg-blue-600 text-white shadow-blue-500/50' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+								}`}
+							>
+								⚔️ Set 11
+							</button>
+							<button
+								onClick={() => setSelectedQueue('infinity')}
+								className={`px-5 py-2 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm ${
+									selectedQueue === 'infinity' ? 'bg-orange-600 text-white shadow-orange-500/50' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+								}`}
+							>
+								♾️ Infinity
+							</button>
+						</div>
+
 						<GlobalDashboard
 							globalStats={globalStats}
 							mmrHistory={mmrHistory}
