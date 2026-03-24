@@ -9,12 +9,11 @@ import { DeckCard } from "@/app/components/DeckCard";
 import { LoreKeepersLogo } from "@/app/components/LoreKeepersLogo"
 import { Footer } from "@/app/components/Footer";
 import { HelpModal } from "@/app/components/HelpModal";
+import { QueueFilter } from "./components/QueueFilter";
 
 export default function Home() {
-	// NOUVEAU: États pour stocker les données brutes et le filtre sélectionné
 	const [rawCsvData, setRawCsvData] = useState(null);
 	const [selectedQueue, setSelectedQueue] = useState('global');
-
 	const [stats, setStats] = useState(null);
 	const [globalStats, setGlobalStats] = useState(null);
 	const [mmrHistory, setMmrHistory] = useState([]);
@@ -172,32 +171,7 @@ export default function Home() {
 
 				{stats && (
 					<>
-						<div className="flex gap-4 mb-6 animate-[fadeInUp_0.5s_ease-out]">
-							<button
-								onClick={() => setSelectedQueue('global')}
-								className={`px-5 py-2 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm ${
-									selectedQueue === 'global' ? 'bg-purple-600 text-white shadow-purple-500/50' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
-								}`}
-							>
-								🌍 Global
-							</button>
-							<button
-								onClick={() => setSelectedQueue('set 11')}
-								className={`px-5 py-2 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm ${
-									selectedQueue === 'set 11' ? 'bg-blue-600 text-white shadow-blue-500/50' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
-								}`}
-							>
-								⚔️ Set 11
-							</button>
-							<button
-								onClick={() => setSelectedQueue('infinity')}
-								className={`px-5 py-2 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm ${
-									selectedQueue === 'infinity' ? 'bg-orange-600 text-white shadow-orange-500/50' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
-								}`}
-							>
-								♾️ Infinity
-							</button>
-						</div>
+						<QueueFilter selectedQueue={selectedQueue} onSelectQueue={setSelectedQueue} />
 
 						<GlobalDashboard
 							globalStats={globalStats}
