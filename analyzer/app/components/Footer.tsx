@@ -2,7 +2,7 @@
 
 export const Footer = () => {
 	return (
-		<footer className="w-full mt-auto pt-6 pb-2 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-gray-500 gap-4">
+		<footer className="w-full mt-6 pt-6 pb-2 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-gray-500 gap-4">
 
 			{/* GAUCHE : Disclaimer */}
 			<div className="text-[12px] text-gray-600 text-center md:text-left max-w-xl">

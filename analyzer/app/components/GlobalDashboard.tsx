@@ -34,7 +34,7 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 	};
 
 	const winRate = ((globalStats.wins / globalStats.games) * 100).toFixed(1);
-	const playRateOtp = ((globalStats.otpGames / globalStats.games) * 100).toFixed(1);
+	const TossWinRate = ((globalStats.otpGames / globalStats.games) * 100).toFixed(1);
 	const otpWinRate = globalStats.otpGames > 0 ? ((globalStats.otpWins / globalStats.otpGames) * 100).toFixed(1) : "0.0";
 	const otdWinRate = globalStats.otdGames > 0 ? ((globalStats.otdWins / globalStats.otdGames) * 100).toFixed(1) : "0.0";
 	const winRateColor = (globalStats.wins / globalStats.games) >= 0.5 ? 'text-green-400' : 'text-red-400';
@@ -54,8 +54,8 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 					</div>
 
 					<div className="bg-gray-900/60 p-4 rounded-xl border border-gray-700/50 hover:bg-gray-900 transition-colors">
-						<p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wide">Play Rate (OTP)</p>
-						<p className="text-2xl font-bold text-blue-400">{playRateOtp}%</p>
+						<p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wide">Toss Win Rate</p>
+						<p className="text-2xl font-bold text-blue-400">{TossWinRate}%</p>
 						<p className="text-xs text-gray-500 mt-1">Started {globalStats.otpGames} times</p>
 					</div>
 
