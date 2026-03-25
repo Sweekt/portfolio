@@ -122,7 +122,7 @@ export default function Home() {
 			{isHelpModalOpen && <HelpModal onClose={() => setIsHelpModalOpen(false)} />}
 			{selectedDeck && <DeckModal deck={selectedDeck} onClose={() => setSelectedDeck(null)} />}
 
-			<div className={`w-full max-w-7xl mx-auto transition-all duration-500 ease-in-out ${(selectedDeck || isProcessing) ? 'blur-md opacity-40 scale-[0.98] pointer-events-none' : ''}`}>
+			<div className={`w-full max-w-7xl mx-auto mb-6 transition-all duration-500 ease-in-out ${(selectedDeck || isProcessing) ? 'blur-md opacity-40 scale-[0.98] pointer-events-none' : ''}`}>
 
 				<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
 					<div className="flex items-center gap-3">
