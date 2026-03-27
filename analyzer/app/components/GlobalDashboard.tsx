@@ -138,24 +138,26 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 								<XAxis dataKey={chartMode === 'game' ? 'match' : 'date'} stroke="#6b7280" tick={{ fontSize: 11 }} minTickGap={20} />
 								<YAxis stroke="#6b7280" tick={{ fontSize: 11 }} domain={['dataMin - 10', 'dataMax + 10']} />
 								<RechartsTooltip content={<CustomTooltip />} />
-								{/* On ajoute une légende pour comprendre les couleurs */}
 								<Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', color: '#9ca3af' }}/>
 
-								{/* On génère une courbe par file (BO1, BO3, etc.) */}
-								{availableQueues.map((queue, index) => (
-									<Line
-										key={queue}
-										type="monotone"
-										name={queue}
-										dataKey={queue}
-										stroke={COLORS[index % COLORS.length]}
-										strokeWidth={2.5}
-										dot={{ r: 2, strokeWidth: 0 }}
-										activeDot={{ r: 5, strokeWidth: 2 }}
-										connectNulls={true} // Permet de relier les points même s'il y a des trous (surtout pour Per Day)
-										animationDuration={1500}
-									/>
-								))}
+								{availableQueues.map((queue, index) => {
+									const lineColor = COLORS[index % COLORS.length];
+
+									return (
+										<Line
+											key={queue}
+											type="monotone"
+											name={queue}
+											dataKey={queue}
+											stroke={lineColor}
+											strokeWidth={2.5}
+											dot={{ r: 2, fill: lineColor, strokeWidth: 0 }}
+											activeDot={{ r: 5, fill: lineColor, stroke: '#fff', strokeWidth: 2 }}
+											connectNulls={true}
+											animationDuration={1500}
+										/>
+									);
+								})}
 							</LineChart>
 						</ResponsiveContainer>
 					</div>
