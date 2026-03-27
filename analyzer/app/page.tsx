@@ -52,7 +52,8 @@ export default function Home() {
 
 		const colorMap = {};
 		const global = { games: 0, wins: 0, otpGames: 0, otpWins: 0, otdGames: 0, otdWins: 0 };
-		const mmrData = [];
+
+		const mmrData = {};
 		const dayMap = {};
 
 		const validRows = filteredData.filter(row => row['My Colors'] && row['Result']);
@@ -67,11 +68,18 @@ export default function Home() {
 			if (row['Turn Order'] === 'OTP') { global.otpGames++; if (isWin) global.otpWins++; }
 			else if (row['Turn Order'] === 'OTD') { global.otdGames++; if (isWin) global.otdWins++; }
 
-			if (row['MMR After']) {
+			if (row['MMR After'] && row.Queue) {
+				const exactQueue = row.Queue;
+
+				if (!mmrData[exactQueue]) mmrData[exactQueue] = [];
+				if (!dayMap[exactQueue]) dayMap[exactQueue] = {};
+
 				const gameDate = row['Started At'] ? row['Started At'].split(' ')[0] : '';
-				const gameEntry = { match: index + 1, date: gameDate, mmr: row['MMR After'], deck: colorDuo };
-				mmrData.push(gameEntry);
-				if (gameDate) dayMap[gameDate] = gameEntry;
+
+				const gameEntry = { match: mmrData[exactQueue].length + 1, date: gameDate, mmr: row['MMR After'], deck: colorDuo };
+
+				mmrData[exactQueue].push(gameEntry);
+				if (gameDate) dayMap[exactQueue][gameDate] = gameEntry;
 			}
 
 			if (!colorMap[colorDuo]) {
@@ -96,7 +104,11 @@ export default function Home() {
 
 		const statsArray = Object.values(colorMap).sort((a, b) => b.games - a.games);
 		statsArray.forEach(deck => deck.sortedMatchups = Object.values(deck.matchups).sort((a, b) => b.games - a.games));
-		const mmrByDayArray = Object.values(dayMap).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+		const mmrByDayArray = {};
+		Object.keys(dayMap).forEach(q => {
+			mmrByDayArray[q] = Object.values(dayMap[q]).sort((a, b) => new Date(a.date) - new Date(b.date));
+		});
 
 		setStats(statsArray);
 		setGlobalStats(global);
