@@ -1,8 +1,9 @@
-﻿import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
+﻿import React, { useMemo } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, chartMode, setChartMode }) => {
 
+	// --- 1. SÉCURITÉ : Pas de données ---
 	if (!globalStats || globalStats.games === 0) {
 		return (
 			<div
@@ -20,24 +21,71 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 		);
 	}
 
-	// On récupère la liste des files exactes existantes (ex: ["Set 11 BO1", "Set 11 BO3"])
+	// --- 2. PRÉPARATION DES DONNÉES MULTI-COURBES ---
 	const availableQueues = Object.keys(mmrHistory).sort();
 
-	const CustomTooltip = ({ active, payload }) => {
+	// Une palette de couleurs bien visibles pour différencier les courbes
+	const COLORS = ['#8b5cf6', '#3b82f6', '#f97316', '#10b981', '#ec4899', '#eab308'];
+
+	// Le mixeur : On fusionne toutes les files dans un seul tableau pour Recharts
+	const combinedData = useMemo(() => {
+		if (chartMode === 'game') {
+			const data = [];
+			let maxLength = 0;
+			availableQueues.forEach(q => { if (mmrHistory[q].length > maxLength) maxLength = mmrHistory[q].length; });
+
+			for (let i = 0; i < maxLength; i++) {
+				const entry = { match: i + 1 };
+				availableQueues.forEach(q => {
+					if (mmrHistory[q][i]) {
+						entry[q] = mmrHistory[q][i].mmr;
+						entry[`${q}_deck`] = mmrHistory[q][i].deck; // On cache le deck ici pour le tooltip !
+					}
+				});
+				data.push(entry);
+			}
+			return data;
+		} else {
+			// Mode "Per Day"
+			const dateMap = {};
+			availableQueues.forEach(q => {
+				mmrHistoryByDay[q].forEach(item => {
+					if (!dateMap[item.date]) dateMap[item.date] = { date: item.date };
+					dateMap[item.date][q] = item.mmr;
+				});
+			});
+			return Object.values(dateMap).sort((a, b) => new Date(a.date) - new Date(b.date));
+		}
+	}, [mmrHistory, mmrHistoryByDay, chartMode, availableQueues]);
+
+	// --- 3. TOOLTIP INTELLIGENT ---
+	// Il s'adapte maintenant pour afficher toutes les courbes qui passent par ce point
+	const CustomTooltip = ({ active, payload, label }) => {
 		if (active && payload && payload.length) {
-			const data = payload[0].payload;
 			return (
-				<div className="bg-gray-800 border border-gray-600 p-3 rounded-lg shadow-xl">
-					<p className="font-bold text-white mb-1">{chartMode === 'game' ? `Match #${data.match}` : `End of day`}</p>
-					<p className="text-blue-400 text-sm">MMR : <span className="font-bold">{data.mmr}</span></p>
-					<p className="text-gray-500 text-xs mt-1">{data.date}</p>
-					{chartMode === 'game' && <p className="text-gray-400 text-xs mt-1">{data.deck}</p>}
+				<div className="bg-gray-800 border border-gray-600 p-3 rounded-lg shadow-xl min-w-[180px]">
+					<p className="font-bold text-gray-300 mb-2 border-b border-gray-700 pb-1">
+						{chartMode === 'game' ? `Match #${label}` : `Day : ${label}`}
+					</p>
+					{payload.map((entry, index) => (
+						<div key={index} className="mb-2 last:mb-0">
+							<div className="flex justify-between items-center gap-4">
+								<span style={{ color: entry.color }} className="text-sm font-bold">{entry.name} :</span>
+								<span className="text-white font-bold">{entry.value}</span>
+							</div>
+							{/* Affiche le deck joué si on est en mode "Per Game" */}
+							{chartMode === 'game' && entry.payload[`${entry.name}_deck`] && (
+								<p className="text-gray-500 text-xs ml-2 mt-0.5">- {entry.payload[`${entry.name}_deck`]}</p>
+							)}
+						</div>
+					))}
 				</div>
 			);
 		}
 		return null;
 	};
 
+	// --- 4. CALCUL DES STATS ---
 	const winRate = ((globalStats.wins / globalStats.games) * 100).toFixed(1);
 	const playRateOtp = ((globalStats.otpGames / globalStats.games) * 100).toFixed(1);
 	const otpWinRate = globalStats.otpGames > 0 ? ((globalStats.otpWins / globalStats.otpGames) * 100).toFixed(1) : "0.0";
@@ -47,7 +95,6 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 	return (
 		<div className="mb-10 bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 p-6 flex flex-col lg:flex-row gap-8 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
 
-			{/* STATISTIQUES (Gauche) */}
 			<div className="w-full lg:w-1/3 flex flex-col justify-center">
 				<h2 className="text-xl font-bold mb-6 text-gray-200">Global Overview</h2>
 				<div className="grid grid-cols-2 gap-4">
@@ -72,9 +119,8 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 				</div>
 			</div>
 
-			{/* GRAPHIQUES MMR (Droite) - Hauteur dynamique pour s'adapter au nb de graphs */}
-			<div className="w-full lg:w-2/3 bg-gray-900/40 rounded-xl border border-gray-700/50 p-4 flex flex-col min-h-[18rem]">
-				<div className="flex justify-between items-center mb-4">
+			<div className="w-full lg:w-2/3 bg-gray-900/40 rounded-xl border border-gray-700/50 p-4 flex flex-col min-h-[22rem]">
+				<div className="flex justify-between items-center mb-2">
 					<h3 className="text-sm text-gray-400 font-medium uppercase tracking-wide">MMR Evolution</h3>
 					{availableQueues.length > 0 && (
 						<div className="flex bg-gray-900 rounded-lg p-1 border border-gray-700">
@@ -84,31 +130,34 @@ export const GlobalDashboard = ({ globalStats, mmrHistory, mmrHistoryByDay, char
 					)}
 				</div>
 
-				{/* LA GRILLE MAGIQUE : S'adapte en fonction du nombre de graphs ! */}
 				{availableQueues.length > 0 ? (
-					<div className={`grid gap-4 flex-grow ${availableQueues.length > 1 ? 'grid-cols-1 xl:grid-cols-2' : 'grid-cols-1'}`}>
+					<div className="flex-grow w-full mt-2">
+						<ResponsiveContainer width="100%" height="100%">
+							<LineChart data={combinedData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+								<CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
+								<XAxis dataKey={chartMode === 'game' ? 'match' : 'date'} stroke="#6b7280" tick={{ fontSize: 11 }} minTickGap={20} />
+								<YAxis stroke="#6b7280" tick={{ fontSize: 11 }} domain={['dataMin - 10', 'dataMax + 10']} />
+								<RechartsTooltip content={<CustomTooltip />} />
+								{/* On ajoute une légende pour comprendre les couleurs */}
+								<Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', color: '#9ca3af' }}/>
 
-						{availableQueues.map((queueName) => {
-							const data = chartMode === 'game' ? mmrHistory[queueName] : mmrHistoryByDay[queueName];
-
-							return (
-								<div key={queueName} className="flex flex-col bg-gray-800/40 p-3 rounded-lg border border-gray-700/50 hover:bg-gray-800/70 transition-colors">
-									<h4 className="text-xs font-bold text-gray-300 text-center mb-3 tracking-wider">{queueName}</h4>
-									<div className="w-full h-40 xl:h-48">
-										<ResponsiveContainer width="100%" height="100%">
-											<LineChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-												<CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
-												<XAxis dataKey={chartMode === 'game' ? 'match' : 'date'} stroke="#6b7280" tick={{ fontSize: 10 }} minTickGap={20} />
-												<YAxis stroke="#6b7280" tick={{ fontSize: 10 }} domain={['dataMin - 10', 'dataMax + 10']} />
-												<RechartsTooltip content={<CustomTooltip />} />
-												<Line type="monotone" dataKey="mmr" stroke="#8b5cf6" strokeWidth={2.5} dot={{ r: 2, fill: '#8b5cf6', strokeWidth: 0 }} activeDot={{ r: 5, fill: '#c084fc', stroke: '#fff', strokeWidth: 2 }} animationDuration={1500} />
-											</LineChart>
-										</ResponsiveContainer>
-									</div>
-								</div>
-							);
-						})}
-
+								{/* On génère une courbe par file (BO1, BO3, etc.) */}
+								{availableQueues.map((queue, index) => (
+									<Line
+										key={queue}
+										type="monotone"
+										name={queue}
+										dataKey={queue}
+										stroke={COLORS[index % COLORS.length]}
+										strokeWidth={2.5}
+										dot={{ r: 2, strokeWidth: 0 }}
+										activeDot={{ r: 5, strokeWidth: 2 }}
+										connectNulls={true} // Permet de relier les points même s'il y a des trous (surtout pour Per Day)
+										animationDuration={1500}
+									/>
+								))}
+							</LineChart>
+						</ResponsiveContainer>
 					</div>
 				) : (
 					<div className="flex-grow flex items-center justify-center text-gray-500 font-medium bg-gray-900/20 rounded-lg border border-gray-800 border-dashed">
