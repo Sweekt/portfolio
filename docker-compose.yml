@@ -1,29 +1,6 @@
-services:
-  # --- TRAEFIK ---
-  traefik:
-    image: traefik:v3.1
-    container_name: traefik
-    command:
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.myresolver.acme.email=benjamin.roy69@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./letsencrypt:/letsencrypt
-    networks: [app-network]
-    restart: always
+version: '3.8'
 
-  # --- FRONTEND ---
+services:
   frontend:
     build: ./frontend
     container_name: portfolio_front
@@ -32,43 +9,9 @@ services:
       - "traefik.http.routers.frontend.rule=Host(`sweek.ovh`) || Host(`www.sweek.ovh`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=myresolver"
-    depends_on: [traefik]
     networks: [app-network]
     restart: always
 
-  # --- GRAFANA ---
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    user: "0" # <-- LE RETOUR DE L'UTILISATEUR ROOT (Indispensable pour les droits)
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`sweek.ovh`) && PathPrefix(`/grafana`)"
-      - "traefik.http.routers.grafana.entrypoints=websecure"
-      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
-    environment:
-      - GF_SERVER_ROOT_URL=https://sweek.ovh/grafana/
-      - GF_SERVER_SERVE_FROM_SUB_PATH=true
-    volumes:
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana_data:/var/lib/grafana # <-- Le bon chemin d'origine !
-    networks: [app-network]
-    restart: always
-
-  # --- CADVISOR ---
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    networks: [app-network]
-    restart: always
-
-  # --- APIS ---
   pong-api:
     build: ./pong
     container_name: pong_api
@@ -81,34 +24,6 @@ services:
     networks: [app-network]
     restart: always
 
-  # --- MONITORING ---
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.rule=Host(`sweek.ovh`) && PathPrefix(`/prometheus`)"
-      - "traefik.http.routers.prometheus.entrypoints=websecure"
-      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.external-url=https://sweek.ovh/prometheus/'
-    networks: [app-network]
-
-  # --- LORCANA ANALYZER ---
-  analyzer:
-    build: ./analyzer
-    container_name: lorcana_analyzer
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.analyzer.rule=Host(`sweek.ovh`) && PathPrefix(`/analyzer`)"
-      - "traefik.http.routers.analyzer.entrypoints=websecure"
-      - "traefik.http.routers.analyzer.tls.certresolver=myresolver"
-      - "traefik.http.services.analyzer.loadbalancer.server.port=3000"
-    networks: [app-network]
-    restart: always
-
 networks:
   app-network:
-    driver: bridge
+    external: true
