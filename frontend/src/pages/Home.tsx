@@ -122,7 +122,7 @@ export default function Home() {
                         <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mr-2 flex items-center gap-1.5">
                             <Terminal size={14} className="text-purple-600 dark:text-purple-400" /> Core Stack:
                         </span>
-                        {['TypeScript', 'React', 'Node.js', 'C / C++', 'Unity', 'Docker'].map((tech) => (
+                        {['PHP', 'Laravel', 'TypeScript', 'React', 'Next.js', 'Docker'].map((tech) => (
                             <span
                                 key={tech}
                                 className="px-3 py-1 rounded-lg text-xs font-medium bg-neutral-200/70 dark:bg-white/5 border border-neutral-300/60 dark:border-white/10 text-neutral-800 dark:text-neutral-300 shadow-xs"
