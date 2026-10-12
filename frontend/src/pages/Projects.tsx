@@ -288,8 +288,8 @@ export default function Projects() {
                         </p>
                     </div>
 
-                    {/* Carousel Nav Arrows */}
-                    <div className="flex items-center gap-2.5 shrink-0">
+                    {/* Carousel Nav Arrows (Desktop and Tablet only) */}
+                    <div className="hidden sm:flex items-center gap-2.5 shrink-0">
                         <button
                             onClick={scrollPrev}
                             disabled={!canScrollLeft}
