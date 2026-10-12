@@ -164,18 +164,47 @@ export default function Projects() {
         return project.category === activeFilter;
     });
 
-    // Update carousel navigation state
+    // Accurate scroll & active card index calculation
     const updateScrollState = () => {
-        if (carouselRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-            setCanScrollLeft(scrollLeft > 15);
-            setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 15);
+        const el = carouselRef.current;
+        if (!el) return;
 
-            const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 420;
-            const gap = 24;
-            const newIndex = Math.round(scrollLeft / (cardWidth + gap));
-            setCurrentIndex(Math.min(Math.max(newIndex, 0), filteredProjects.length - 1));
+        const { scrollLeft, scrollWidth, clientWidth } = el;
+        const maxScrollLeft = scrollWidth - clientWidth;
+        const isAtStart = scrollLeft <= 12;
+        const isAtEnd = scrollLeft >= maxScrollLeft - 25;
+
+        setCanScrollLeft(!isAtStart);
+        setCanScrollRight(!isAtEnd);
+
+        if (isAtStart) {
+            setCurrentIndex(0);
+            return;
         }
+
+        if (isAtEnd) {
+            setCurrentIndex(filteredProjects.length - 1);
+            return;
+        }
+
+        // Measure cards center distances to determine current focused card
+        const cards = Array.from(el.children).filter(c => c.getAttribute('data-project-card')) as HTMLElement[];
+        if (cards.length === 0) return;
+
+        const viewportCenter = scrollLeft + clientWidth / 2;
+        let closestIdx = 0;
+        let minDiff = Infinity;
+
+        cards.forEach((card, idx) => {
+            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+            const diff = Math.abs(viewportCenter - cardCenter);
+            if (diff < minDiff) {
+                minDiff = diff;
+                closestIdx = idx;
+            }
+        });
+
+        setCurrentIndex(closestIdx);
     };
 
     useEffect(() => {
@@ -188,31 +217,40 @@ export default function Projects() {
     }, [filteredProjects]);
 
     const scrollToCard = (index: number) => {
-        if (carouselRef.current) {
-            const cards = carouselRef.current.children;
-            if (cards[index]) {
-                (cards[index] as HTMLElement).scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'start'
-                });
-            }
+        const el = carouselRef.current;
+        if (!el) return;
+
+        const cards = Array.from(el.children).filter(c => c.getAttribute('data-project-card')) as HTMLElement[];
+        const targetCard = cards[index];
+        if (!targetCard) return;
+
+        if (index === 0) {
+            el.scrollTo({ left: 0, behavior: 'smooth' });
+        } else if (index === cards.length - 1) {
+            el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
+        } else {
+            const cardCenter = targetCard.offsetLeft + targetCard.offsetWidth / 2;
+            const targetScroll = cardCenter - el.clientWidth / 2;
+            el.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
         }
     };
 
     const scrollPrev = () => {
-        if (carouselRef.current) {
-            const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 420;
-            carouselRef.current.scrollBy({ left: -(cardWidth + 24), behavior: 'smooth' });
-        }
+        const prevIdx = Math.max(currentIndex - 1, 0);
+        scrollToCard(prevIdx);
     };
 
     const scrollNext = () => {
-        if (carouselRef.current) {
-            const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 420;
-            carouselRef.current.scrollBy({ left: cardWidth + 24, behavior: 'smooth' });
-        }
+        const nextIdx = Math.min(currentIndex + 1, filteredProjects.length - 1);
+        scrollToCard(nextIdx);
     };
+
+    // Dynamic gradient mask for carousel edges
+    const maskGradient = `linear-gradient(to right, ${
+        canScrollLeft ? 'transparent 0px, black 56px' : 'black 0px'
+    }, ${
+        canScrollRight ? 'black calc(100% - 56px), transparent 100%' : 'black 100%'
+    })`;
 
     return (
         <motion.section
@@ -236,11 +274,11 @@ export default function Projects() {
                             <span className="hidden sm:inline-block h-1 w-24 bg-gradient-to-r from-purple-600 to-transparent rounded-full opacity-40"></span>
                         </h2>
                         <p className="mt-3 text-neutral-600 dark:text-neutral-400 text-sm sm:text-base max-w-2xl leading-relaxed">
-                            Swipe or scroll horizontally through my creations — live SaaS, browser games, and indie prototypes.
+                            A live competitive SaaS platform, browser games, and indie prototypes.
                         </p>
                     </div>
 
-                    {/* Carousel Nav Arrows (Desktop & Tablet) */}
+                    {/* Carousel Nav Arrows */}
                     <div className="flex items-center gap-2.5 shrink-0">
                         <button
                             onClick={scrollPrev}
@@ -314,10 +352,29 @@ export default function Projects() {
                 </div>
             </div>
 
-            {/* Dynamic Single-Row Carousel Track */}
+            {/* Dynamic Carousel Track with edge gradient fades */}
             <div className="relative">
+                {/* Left Edge Fade */}
+                <div
+                    className={`pointer-events-none absolute left-0 top-0 bottom-6 w-12 sm:w-20 bg-gradient-to-r from-neutral-50 dark:from-neutral-950 to-transparent z-10 transition-opacity duration-300 ${
+                        canScrollLeft ? 'opacity-100' : 'opacity-0'
+                    }`}
+                />
+
+                {/* Right Edge Fade */}
+                <div
+                    className={`pointer-events-none absolute right-0 top-0 bottom-6 w-12 sm:w-20 bg-gradient-to-l from-neutral-50 dark:from-neutral-950 to-transparent z-10 transition-opacity duration-300 ${
+                        canScrollRight ? 'opacity-100' : 'opacity-0'
+                    }`}
+                />
+
                 <div
                     ref={carouselRef}
+                    style={{
+                        maskImage: maskGradient,
+                        WebkitMaskImage: maskGradient,
+                        transition: 'mask-image 0.2s ease, -webkit-mask-image 0.2s ease',
+                    }}
                     className="flex gap-6 sm:gap-7 overflow-x-auto scroll-smooth snap-x snap-mandatory py-3 pb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 >
                     {filteredProjects.map((project) => {
@@ -326,6 +383,7 @@ export default function Projects() {
                         return (
                             <div
                                 key={project.id}
+                                data-project-card="true"
                                 className="snap-start shrink-0 w-[85vw] sm:w-[420px] lg:w-[460px] xl:w-[480px] group bg-white dark:bg-purple-950/25 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-900/10 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
                             >
                                 {/* Card Top: Banner Image & Status */}
@@ -448,6 +506,9 @@ export default function Projects() {
                             </div>
                         );
                     })}
+
+                    {/* End Spacer for breathing room when scrolled to last card */}
+                    <div className="shrink-0 w-8 sm:w-16 pointer-events-none" aria-hidden="true" />
                 </div>
             </div>
 
@@ -469,7 +530,8 @@ export default function Projects() {
                 </div>
 
                 <div className="flex items-center gap-3 text-xs font-semibold text-neutral-500 dark:text-neutral-400">
-                    <span className="hidden sm:inline">← Drag or swipe horizontally →</span>
+                    {/* Visible only on mobile */}
+                    <span className="sm:hidden text-[11px] text-neutral-400">← Swipe pour explorer →</span>
                     <span className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 font-mono">
                         0{currentIndex + 1} / 0{filteredProjects.length}
                     </span>
