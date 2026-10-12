@@ -4,6 +4,16 @@ import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { ArrowRight, Code2, Gamepad2, Mail, Terminal } from 'lucide-react';
 
 export default function Home() {
+    const scrollTo = (id: string) => (e: React.MouseEvent) => {
+        e.preventDefault();
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            window.history.pushState(null, '', `#${id}`);
+            window.dispatchEvent(new Event('hashchange'));
+        }
+    };
+
     return (
         <section className="relative min-h-[calc(100vh-80px)] flex items-center justify-center py-12 lg:py-20 px-4 sm:px-6 lg:px-12 overflow-hidden">
             {/* Ambient Background Glows */}
@@ -63,7 +73,8 @@ export default function Home() {
                     >
                         <a
                             href="#projects"
-                            className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm tracking-wide shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                            onClick={scrollTo('projects')}
+                            className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm tracking-wide shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
                         >
                             <Gamepad2 size={18} />
                             <span>Explore Projects</span>
@@ -72,7 +83,8 @@ export default function Home() {
 
                         <a
                             href="#contact"
-                            className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-white/80 dark:bg-white/5 hover:bg-neutral-100 dark:hover:bg-white/10 border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-neutral-200 font-semibold text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-95 backdrop-blur-sm shadow-sm"
+                            onClick={scrollTo('contact')}
+                            className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-white/80 dark:bg-white/5 hover:bg-neutral-100 dark:hover:bg-white/10 border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-neutral-200 font-semibold text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-95 backdrop-blur-sm shadow-sm cursor-pointer"
                         >
                             <Mail size={16} />
                             <span>Get in Touch</span>
@@ -130,13 +142,13 @@ export default function Home() {
                         className="relative group flex items-center justify-center"
                     >
                         {/* Ambient Back Glow */}
-                        <div className="absolute -inset-4 bg-gradient-to-tr from-purple-600/30 via-indigo-500/20 to-purple-400/30 rounded-full blur-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                        <div className="absolute -inset-6 bg-gradient-to-tr from-purple-600/35 via-indigo-500/25 to-purple-400/35 rounded-full blur-3xl opacity-80 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
                         {/* Orbit Decorative Ring */}
-                        <div className="absolute -inset-4 sm:-inset-5 rounded-full border border-purple-500/20 dark:border-purple-400/20 pointer-events-none" />
+                        <div className="absolute -inset-5 sm:-inset-6 rounded-full border border-purple-500/20 dark:border-purple-400/20 pointer-events-none" />
 
-                        {/* Avatar Image Frame */}
-                        <div className="relative w-56 h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full p-2 bg-gradient-to-b from-purple-500/30 via-white/10 to-indigo-500/20 border-2 border-purple-500/40 dark:border-purple-400/30 shadow-2xl backdrop-blur-sm overflow-hidden">
+                        {/* Avatar Image Frame (Generously sized) */}
+                        <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 xl:w-[420px] xl:h-[420px] rounded-full p-2.5 bg-gradient-to-b from-purple-500/30 via-white/10 to-indigo-500/20 border-2 border-purple-500/40 dark:border-purple-400/30 shadow-2xl backdrop-blur-sm overflow-hidden">
                             <img
                                 src={mePic}
                                 alt="Benjamin 'Sweek' Roy"
@@ -149,9 +161,9 @@ export default function Home() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6, delay: 0.5 }}
-                            className="absolute -top-2 -right-2 sm:top-2 sm:-right-4 px-3.5 py-1.5 rounded-2xl bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border border-neutral-200 dark:border-white/10 shadow-xl flex items-center gap-2 text-xs font-bold text-neutral-800 dark:text-neutral-200 hover:scale-105 transition-transform"
+                            className="absolute 0 -right-2 sm:top-4 sm:-right-4 px-4 py-2 rounded-2xl bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border border-neutral-200 dark:border-white/10 shadow-xl flex items-center gap-2.5 text-xs sm:text-sm font-bold text-neutral-800 dark:text-neutral-200 hover:scale-105 transition-transform"
                         >
-                            <Gamepad2 className="text-purple-600 dark:text-purple-400" size={16} />
+                            <Gamepad2 className="text-purple-600 dark:text-purple-400" size={18} />
                             <span>Game Dev</span>
                         </motion.div>
 
@@ -160,9 +172,9 @@ export default function Home() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6, delay: 0.6 }}
-                            className="absolute -bottom-2 -left-2 sm:bottom-4 sm:-left-4 px-3.5 py-1.5 rounded-2xl bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border border-neutral-200 dark:border-white/10 shadow-xl flex items-center gap-2 text-xs font-bold text-neutral-800 dark:text-neutral-200 hover:scale-105 transition-transform"
+                            className="absolute -bottom-2 -left-2 sm:bottom-6 sm:-left-4 px-4 py-2 rounded-2xl bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border border-neutral-200 dark:border-white/10 shadow-xl flex items-center gap-2.5 text-xs sm:text-sm font-bold text-neutral-800 dark:text-neutral-200 hover:scale-105 transition-transform"
                         >
-                            <Code2 className="text-indigo-600 dark:text-indigo-400" size={16} />
+                            <Code2 className="text-indigo-600 dark:text-indigo-400" size={18} />
                             <span>Full Stack Dev</span>
                         </motion.div>
                     </motion.div>
