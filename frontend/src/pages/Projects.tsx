@@ -6,12 +6,14 @@ import {
     Sparkles,
     Info,
     X,
-    CheckCircle2
+    CheckCircle2,
+    ExternalLink
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import pongIcon from '../assets/pongIcon.png';
 import tdIcon from '../assets/tdIcon.png';
 import smIcon from '../assets/smIcon.png';
+import loreTrackerIcon from '../assets/loretracker.png';
 
 interface ProjectStatus {
     [key: string]: boolean;
@@ -21,7 +23,7 @@ interface ProjectData {
     id: string;
     title: string;
     subtitle: string;
-    category: 'web-game' | 'engine-game';
+    category: 'saas' | 'web-game' | 'engine-game';
     categoryLabel: string;
     icon: string;
     tech: string[];
@@ -29,10 +31,32 @@ interface ProjectData {
     details: string;
     highlights: string[];
     path: string;
+    isExternal?: boolean;
     isAlwaysPlayable?: boolean;
 }
 
 const PROJECTS_DATA: ProjectData[] = [
+    {
+        id: 'LoreTracker',
+        title: 'LoreTracker',
+        subtitle: 'Competitive SaaS analytics & team dashboard for Lorcana TCG',
+        category: 'saas',
+        categoryLabel: 'Full Stack SaaS • Live App',
+        icon: loreTrackerIcon,
+        tech: ['React', 'TypeScript', 'Tailwind CSS', 'API Integration', 'Data Analytics', 'Team Roster'],
+        summary: 'A SaaS platform where competitive Lorcana TCG players sign up, join teams, sync their duels.ink simulator API key, and track individual & team-wide stats.',
+        details: 'LoreTracker connects directly to the duels.ink browser simulator API. Players can create an account, join or manage a competitive team, sync their game logs via API key, track their personal MMR progression curves, and share deck matchups and winrate statistics with teammates for collective meta analysis.',
+        highlights: [
+            'Live production SaaS available at loretracker.fr',
+            'duels.ink API integration with automated match synchronization',
+            'Interactive MMR progression & winrate charts per format (BO1, BO3)',
+            'Team roster management & collaborative meta analytics',
+            'Match history with replay links and Dreamborn deck exports'
+        ],
+        path: 'https://loretracker.fr',
+        isExternal: true,
+        isAlwaysPlayable: false
+    },
     {
         id: 'Pong',
         title: 'Pong Game',
@@ -96,9 +120,10 @@ export default function Projects() {
     const [status, setStatus] = useState<ProjectStatus>({
         'Pong': false,
         'Tower Defense': false,
-        'JRPG': false
+        'JRPG': false,
+        'LoreTracker': true
     });
-    const [activeFilter, setActiveFilter] = useState<'all' | 'web-game' | 'engine-game'>('all');
+    const [activeFilter, setActiveFilter] = useState<'all' | 'saas' | 'web-game' | 'engine-game'>('all');
     const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
     useEffect(() => {
@@ -111,7 +136,7 @@ export default function Projects() {
                 clearTimeout(timeoutId);
 
                 setStatus(prev => ({ ...prev, [id]: response.ok }));
-            } catch (e) {
+            } catch {
                 setStatus(prev => ({ ...prev, [id]: false }));
             }
         };
@@ -143,7 +168,7 @@ export default function Projects() {
                 <div className="flex items-center gap-3 mb-3">
                     <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/20 inline-flex items-center gap-1.5">
                         <Gamepad2 size={14} />
-                        Creative Work
+                        Portfolio & Creations
                     </span>
                 </div>
                 <h2 className="text-4xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter flex items-center gap-4">
@@ -151,14 +176,14 @@ export default function Projects() {
                     <span className="h-1 flex-1 bg-gradient-to-r from-purple-600 to-transparent rounded-full opacity-25"></span>
                 </h2>
                 <p className="mt-3 text-neutral-600 dark:text-neutral-400 text-sm sm:text-base max-w-2xl leading-relaxed">
-                    Interactive browser games, competitive multiplayer architectures, and indie game prototypes. You can launch and play the web games directly!
+                    From a live competitive SaaS platform to interactive browser games and indie prototypes. Launch and explore them directly!
                 </p>
 
                 {/* Filter Tabs */}
                 <div className="mt-8 flex flex-wrap gap-2">
                     <button
                         onClick={() => setActiveFilter('all')}
-                        className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 ${
+                        className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                             activeFilter === 'all'
                                 ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
                                 : 'bg-neutral-100 dark:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
@@ -167,18 +192,28 @@ export default function Projects() {
                         All Projects ({PROJECTS_DATA.length})
                     </button>
                     <button
+                        onClick={() => setActiveFilter('saas')}
+                        className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+                            activeFilter === 'saas'
+                                ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+                                : 'bg-neutral-100 dark:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                        }`}
+                    >
+                        Full Stack SaaS (1)
+                    </button>
+                    <button
                         onClick={() => setActiveFilter('web-game')}
-                        className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 ${
+                        className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                             activeFilter === 'web-game'
                                 ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
                                 : 'bg-neutral-100 dark:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                         }`}
                     >
-                        Playable Browser Games (2)
+                        Browser Games (2)
                     </button>
                     <button
                         onClick={() => setActiveFilter('engine-game')}
-                        className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 ${
+                        className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                             activeFilter === 'engine-game'
                                 ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
                                 : 'bg-neutral-100 dark:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
@@ -189,30 +224,37 @@ export default function Projects() {
                 </div>
             </div>
 
-            {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Projects Grid: 2 columns on desktop for optimal breathing room and readability */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {filteredProjects.map((project) => {
                     const isOnline = status[project.id as keyof typeof status];
 
                     return (
                         <div
                             key={project.id}
-                            className="group h-full bg-white dark:bg-purple-950/25 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-900/10 transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between"
+                            className="group h-full bg-white dark:bg-purple-950/25 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-900/10 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
                         >
                             {/* Card Top: Banner Image & Status */}
                             <div>
-                                <div className="relative h-52 overflow-hidden bg-neutral-950">
+                                <div className="relative h-56 sm:h-64 overflow-hidden bg-neutral-950">
                                     <img
                                         src={project.icon}
                                         alt={project.title}
-                                        className="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-108 transition-all duration-700"
+                                        className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-106 transition-all duration-700"
                                     />
                                     {/* Gradient overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
                                     {/* Status Badge */}
                                     <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 shadow-sm">
-                                        {project.id === 'Pong' ? (
+                                        {project.id === 'LoreTracker' ? (
+                                            <>
+                                                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
+                                                <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+                                                    Live SaaS
+                                                </span>
+                                            </>
+                                        ) : project.id === 'Pong' ? (
                                             <>
                                                 <span className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></span>
                                                 <span className="text-[10px] font-bold text-white uppercase tracking-wider">
@@ -236,7 +278,7 @@ export default function Projects() {
 
                                     {/* Category Pill Tag */}
                                     <div className="absolute bottom-4 left-5 flex items-center gap-2 text-white font-bold text-xs uppercase tracking-wider drop-shadow-sm">
-                                        <span className="px-2.5 py-1 rounded-md bg-purple-600/80 backdrop-blur-sm">
+                                        <span className="px-2.5 py-1 rounded-md bg-purple-600/85 backdrop-blur-sm">
                                             {project.categoryLabel}
                                         </span>
                                     </div>
@@ -272,10 +314,20 @@ export default function Projects() {
 
                             {/* Card Footer Actions */}
                             <div className="p-6 sm:p-7 pt-0 border-t border-neutral-100 dark:border-white/5 mt-4 flex items-center gap-3">
-                                {project.path ? (
+                                {project.isExternal ? (
+                                    <a
+                                        href={project.path}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md shadow-purple-600/20 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
+                                    >
+                                        <span>Visit loretracker.fr</span>
+                                        <ExternalLink size={15} />
+                                    </a>
+                                ) : project.path ? (
                                     <NavLink
                                         to={project.path}
-                                        className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md shadow-purple-600/20 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center"
+                                        className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md shadow-purple-600/20 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
                                     >
                                         <Play size={15} fill="currentColor" />
                                         <span>Play in Browser</span>
@@ -283,7 +335,7 @@ export default function Projects() {
                                 ) : (
                                     <button
                                         onClick={() => setSelectedProject(project)}
-                                        className="flex-1 py-3 px-4 rounded-xl bg-neutral-200/80 dark:bg-white/10 hover:bg-neutral-300 dark:hover:bg-white/20 text-neutral-900 dark:text-white text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center"
+                                        className="flex-1 py-3 px-4 rounded-xl bg-neutral-200/80 dark:bg-white/10 hover:bg-neutral-300 dark:hover:bg-white/20 text-neutral-900 dark:text-white text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
                                     >
                                         <Sparkles size={15} />
                                         <span>In Development</span>
@@ -292,9 +344,9 @@ export default function Projects() {
 
                                 <button
                                     onClick={() => setSelectedProject(project)}
-                                    title="View game details & highlights"
+                                    title="View project details & architecture"
                                     aria-label="View details"
-                                    className="p-3 rounded-xl bg-neutral-100 dark:bg-white/5 hover:bg-neutral-200 dark:hover:bg-white/10 border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                                    className="p-3 rounded-xl bg-neutral-100 dark:bg-white/5 hover:bg-neutral-200 dark:hover:bg-white/10 border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer"
                                 >
                                     <Info size={17} />
                                 </button>
@@ -318,7 +370,7 @@ export default function Projects() {
                             {/* Close Button */}
                             <button
                                 onClick={() => setSelectedProject(null)}
-                                className="absolute top-6 right-6 p-2 rounded-full bg-neutral-100 dark:bg-white/10 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"
+                                className="absolute top-6 right-6 p-2 rounded-full bg-neutral-100 dark:bg-white/10 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors cursor-pointer"
                             >
                                 <X size={20} />
                             </button>
@@ -361,7 +413,7 @@ export default function Projects() {
 
                                 <div className="pt-2">
                                     <h4 className="font-bold text-neutral-900 dark:text-white text-sm mb-2">
-                                        Technologies:
+                                        Technologies & Stack:
                                     </h4>
                                     <div className="flex flex-wrap gap-2">
                                         {selectedProject.tech.map((t) => (
@@ -378,19 +430,30 @@ export default function Projects() {
 
                             {/* Modal Actions */}
                             <div className="mt-8 pt-5 border-t border-neutral-100 dark:border-white/10 flex items-center justify-end gap-3">
-                                {selectedProject.path && (
+                                {selectedProject.isExternal ? (
+                                    <a
+                                        href={selectedProject.path}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="py-3 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-sm font-bold shadow-md shadow-purple-600/30 flex items-center gap-2 cursor-pointer"
+                                    >
+                                        <span>Open loretracker.fr</span>
+                                        <ExternalLink size={16} />
+                                    </a>
+                                ) : selectedProject.path ? (
                                     <NavLink
                                         to={selectedProject.path}
                                         onClick={() => setSelectedProject(null)}
-                                        className="py-3 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-sm font-bold shadow-md shadow-purple-600/30 flex items-center gap-2"
+                                        className="py-3 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-sm font-bold shadow-md shadow-purple-600/30 flex items-center gap-2 cursor-pointer"
                                     >
                                         <Play size={16} fill="currentColor" />
                                         <span>Launch Game</span>
                                     </NavLink>
-                                )}
+                                ) : null}
+
                                 <button
                                     onClick={() => setSelectedProject(null)}
-                                    className="py-3 px-5 rounded-xl bg-neutral-100 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-semibold text-sm hover:bg-neutral-200 dark:hover:bg-white/20 transition-colors"
+                                    className="py-3 px-5 rounded-xl bg-neutral-100 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-semibold text-sm hover:bg-neutral-200 dark:hover:bg-white/20 transition-colors cursor-pointer"
                                 >
                                     Close
                                 </button>

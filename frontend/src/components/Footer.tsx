@@ -123,7 +123,7 @@ export default function Footer() {
                     <div className="md:col-span-4 space-y-3">
                         <div className="flex items-center justify-between">
                             <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white flex items-center gap-1.5">
-                                <Gamepad2 size={14} className="text-purple-600" /> Playable in Browser
+                                <Gamepad2 size={14} className="text-purple-600" /> Featured Apps & Games
                             </h4>
                             <button
                                 onClick={scrollToTop}
@@ -134,6 +134,17 @@ export default function Footer() {
                             </button>
                         </div>
                         <ul className="space-y-2 text-sm">
+                            <li>
+                                <a
+                                    href="https://loretracker.fr"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                                >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                    <span>LoreTracker (Lorcana SaaS)</span>
+                                </a>
+                            </li>
                             <li>
                                 <NavLink
                                     to="/projects/Pong"
