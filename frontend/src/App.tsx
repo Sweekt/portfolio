@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ScrollPage from './components/ScrollPage.tsx'; // Contient maintenant UNIQUEMENT les sections
 import Pong from './pages/Pong';
-import TowerDefense from './pages/Td.tsx'
+import TowerDefense from './pages/Td.tsx';
 import NavigationBar from './components/NavigationBar';
+import Footer from './components/Footer';
 
 export default function App() {
     return (
@@ -16,6 +17,7 @@ export default function App() {
                         <Route path="/projects/TowerDefense" element={<TowerDefense />} />
                     </Routes>
                 </main>
+                <Footer />
             </div>
         </Router>
     );
