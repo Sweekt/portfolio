@@ -6,7 +6,6 @@ import {
     Zap,
     ArrowLeft,
     RotateCcw,
-    Trophy,
     Sparkles,
     AlertCircle,
     Swords
@@ -118,8 +117,8 @@ export default function Pong() {
                             {/* Arcade Bottom Footer */}
                             <div className="flex items-center justify-between px-5 py-2.5 bg-neutral-950 border-t border-neutral-800/80 text-[11px] text-neutral-400 font-medium">
                                 <span className="flex items-center gap-1.5 text-neutral-300">
-                                    <Trophy size={13} className="text-yellow-400" />
-                                    <span>Score 6 points to claim victory</span>
+                                    <Zap size={13} className="text-yellow-400" />
+                                    <span>Hit center pickups to trigger power-ups & speed boosts</span>
                                 </span>
                                 <span className="hidden sm:inline-block text-neutral-500">
                                     Zero-dependency physics & collision engine
@@ -157,10 +156,10 @@ export default function Pong() {
                         <div className="p-4 rounded-2xl bg-neutral-50 dark:bg-white/5 border border-neutral-100 dark:border-white/5 space-y-2">
                             <div className="flex items-center justify-between">
                                 <span className="text-xs font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300 flex items-center gap-2">
-                                    <span className="h-2.5 w-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+                                    <span className="h-2.5 w-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
                                     Player 1 (Left)
                                 </span>
-                                <span className="text-[11px] text-neutral-400">Blue Paddle</span>
+                                <span className="text-[11px] text-yellow-600 dark:text-yellow-400 font-semibold">Yellow Paddle</span>
                             </div>
 
                             <div className="flex items-center justify-between pt-1">
@@ -183,10 +182,10 @@ export default function Pong() {
                         <div className="p-4 rounded-2xl bg-neutral-50 dark:bg-white/5 border border-neutral-100 dark:border-white/5 space-y-2">
                             <div className="flex items-center justify-between">
                                 <span className="text-xs font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300 flex items-center gap-2">
-                                    <span className="h-2.5 w-2.5 rounded-full bg-pink-400 shadow-[0_0_8px_#f472b6]"></span>
+                                    <span className="h-2.5 w-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
                                     Player 2 (Right)
                                 </span>
-                                <span className="text-[11px] text-neutral-400">Pink Paddle</span>
+                                <span className="text-[11px] text-yellow-600 dark:text-yellow-400 font-semibold">Yellow Paddle</span>
                             </div>
 
                             <div className="flex items-center justify-between pt-1">
