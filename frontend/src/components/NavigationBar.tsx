@@ -90,7 +90,7 @@ export default function NavigationBar() {
 
     return (
         <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-white/75 dark:bg-neutral-950/80 border-b border-neutral-200/70 dark:border-white/10 transition-colors duration-300">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
+            <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
                 {/* Brand Logo */}
                 <NavLink
                     to="/#home"
@@ -116,7 +116,7 @@ export default function NavigationBar() {
                                 <div
                                     key={section.id}
                                     ref={dropdownRef}
-                                    className="relative"
+                                    className="relative z-30"
                                     onMouseEnter={() => setProjectsDropdownOpen(true)}
                                     onMouseLeave={() => setProjectsDropdownOpen(false)}
                                 >
@@ -264,7 +264,7 @@ export default function NavigationBar() {
 
             {/* Scroll Progress Indicator Bar */}
             <div
-                className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-purple-600 via-indigo-500 to-purple-400 transition-all duration-150"
+                className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-purple-600 via-indigo-500 to-purple-400 transition-all duration-150 z-10 pointer-events-none"
                 style={{ width: `${scrollProgress}%` }}
             />
 
@@ -276,7 +276,7 @@ export default function NavigationBar() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.25 }}
-                        className="md:hidden bg-white/95 dark:bg-neutral-950/95 backdrop-blur-2xl border-b border-neutral-200 dark:border-white/10 shadow-2xl overflow-hidden"
+                        className="md:hidden bg-white/95 dark:bg-neutral-950/95 backdrop-blur-2xl border-b border-neutral-200 dark:border-white/10 shadow-2xl overflow-hidden relative z-30"
                     >
                         <div className="px-6 py-5 space-y-3">
                             <button
