@@ -131,8 +131,6 @@ export default function Projects() {
     // Carousel state
     const carouselRef = useRef<HTMLDivElement>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [canScrollLeft, setCanScrollLeft] = useState(false);
-    const [canScrollRight, setCanScrollRight] = useState(true);
 
     useEffect(() => {
         const checkHealth = async (id: string, url: string) => {
@@ -164,40 +162,41 @@ export default function Projects() {
         return project.category === activeFilter;
     });
 
-    // Accurate scroll & active card index calculation
-    const updateScrollState = () => {
+    // Reset carousel scroll on filter change
+    useEffect(() => {
+        setCurrentIndex(0);
+        if (carouselRef.current) {
+            carouselRef.current.scrollTo({ left: 0, behavior: 'instant' });
+        }
+    }, [activeFilter]);
+
+    // Determine which card is currently active based on offsetLeft distance to scrollLeft
+    const updateIndexFromScroll = () => {
         const el = carouselRef.current;
         if (!el) return;
 
-        const { scrollLeft, scrollWidth, clientWidth } = el;
-        const maxScrollLeft = scrollWidth - clientWidth;
-        const isAtStart = scrollLeft <= 12;
-        const isAtEnd = scrollLeft >= maxScrollLeft - 25;
+        const scrollLeft = el.scrollLeft;
+        const maxScroll = el.scrollWidth - el.clientWidth;
 
-        setCanScrollLeft(!isAtStart);
-        setCanScrollRight(!isAtEnd);
-
-        if (isAtStart) {
+        // Guaranteed boundaries for 1/4 and 4/4
+        if (scrollLeft <= 25) {
             setCurrentIndex(0);
             return;
         }
 
-        if (isAtEnd) {
+        if (maxScroll > 0 && scrollLeft >= maxScroll - 35) {
             setCurrentIndex(filteredProjects.length - 1);
             return;
         }
 
-        // Measure cards center distances to determine current focused card
-        const cards = Array.from(el.children).filter(c => c.getAttribute('data-project-card')) as HTMLElement[];
+        const cards = Array.from(el.querySelectorAll<HTMLElement>('[data-project-card]'));
         if (cards.length === 0) return;
 
-        const viewportCenter = scrollLeft + clientWidth / 2;
         let closestIdx = 0;
         let minDiff = Infinity;
 
         cards.forEach((card, idx) => {
-            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-            const diff = Math.abs(viewportCenter - cardCenter);
+            const diff = Math.abs(card.offsetLeft - scrollLeft);
             if (diff < minDiff) {
                 minDiff = diff;
                 closestIdx = idx;
@@ -210,9 +209,17 @@ export default function Projects() {
     useEffect(() => {
         const el = carouselRef.current;
         if (el) {
-            el.addEventListener('scroll', updateScrollState, { passive: true });
-            updateScrollState();
-            return () => el.removeEventListener('scroll', updateScrollState);
+            let timer: number | null = null;
+            const onScroll = () => {
+                if (timer) window.clearTimeout(timer);
+                timer = window.setTimeout(updateIndexFromScroll, 40);
+            };
+
+            el.addEventListener('scroll', onScroll, { passive: true });
+            return () => {
+                el.removeEventListener('scroll', onScroll);
+                if (timer) window.clearTimeout(timer);
+            };
         }
     }, [filteredProjects]);
 
@@ -220,44 +227,47 @@ export default function Projects() {
         const el = carouselRef.current;
         if (!el) return;
 
-        const cards = Array.from(el.children).filter(c => c.getAttribute('data-project-card')) as HTMLElement[];
-        const targetCard = cards[index];
-        if (!targetCard) return;
+        const cards = Array.from(el.querySelectorAll<HTMLElement>('[data-project-card]'));
+        const safeIndex = Math.max(0, Math.min(index, filteredProjects.length - 1));
 
-        if (index === 0) {
-            el.scrollTo({ left: 0, behavior: 'smooth' });
-        } else if (index === cards.length - 1) {
-            el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
-        } else {
-            const cardCenter = targetCard.offsetLeft + targetCard.offsetWidth / 2;
-            const targetScroll = cardCenter - el.clientWidth / 2;
-            el.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+        if (safeIndex === 0) {
+            el.scrollTo({
+                left: 0,
+                behavior: 'smooth'
+            });
+            setCurrentIndex(0);
+            return;
         }
+
+        const target = cards[safeIndex];
+        if (!target) return;
+
+        el.scrollTo({
+            left: target.offsetLeft,
+            behavior: 'smooth'
+        });
+        setCurrentIndex(safeIndex);
     };
 
     const scrollPrev = () => {
-        const prevIdx = Math.max(currentIndex - 1, 0);
-        scrollToCard(prevIdx);
+        const newIdx = Math.max(currentIndex - 1, 0);
+        scrollToCard(newIdx);
     };
 
     const scrollNext = () => {
-        const nextIdx = Math.min(currentIndex + 1, filteredProjects.length - 1);
-        scrollToCard(nextIdx);
+        const newIdx = Math.min(currentIndex + 1, filteredProjects.length - 1);
+        scrollToCard(newIdx);
     };
 
-    // Dynamic gradient mask for carousel edges
-    const maskGradient = `linear-gradient(to right, ${
-        canScrollLeft ? 'transparent 0px, black 56px' : 'black 0px'
-    }, ${
-        canScrollRight ? 'black calc(100% - 56px), transparent 100%' : 'black 100%'
-    })`;
+    const canScrollLeft = currentIndex > 0;
+    const canScrollRight = currentIndex < filteredProjects.length - 1;
 
     return (
         <motion.section
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+            className="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8"
         >
             {/* Section Header */}
             <div className="mb-10">
@@ -284,9 +294,9 @@ export default function Projects() {
                             onClick={scrollPrev}
                             disabled={!canScrollLeft}
                             aria-label="Previous project"
-                            className={`p-3 rounded-2xl border transition-all duration-200 cursor-pointer ${
+                            className={`p-3 rounded-2xl border transition-all duration-200 ${
                                 canScrollLeft
-                                    ? 'bg-white dark:bg-white/5 border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-white hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 shadow-sm hover:scale-105 active:scale-95'
+                                    ? 'bg-white dark:bg-white/5 border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-white hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 shadow-sm hover:scale-105 active:scale-95 cursor-pointer'
                                     : 'bg-neutral-100 dark:bg-white/5 border-transparent text-neutral-400 dark:text-neutral-600 opacity-40 cursor-not-allowed'
                             }`}
                         >
@@ -296,9 +306,9 @@ export default function Projects() {
                             onClick={scrollNext}
                             disabled={!canScrollRight}
                             aria-label="Next project"
-                            className={`p-3 rounded-2xl border transition-all duration-200 cursor-pointer ${
+                            className={`p-3 rounded-2xl border transition-all duration-200 ${
                                 canScrollRight
-                                    ? 'bg-white dark:bg-white/5 border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-white hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 shadow-sm hover:scale-105 active:scale-95'
+                                    ? 'bg-white dark:bg-white/5 border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-white hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 shadow-sm hover:scale-105 active:scale-95 cursor-pointer'
                                     : 'bg-neutral-100 dark:bg-white/5 border-transparent text-neutral-400 dark:text-neutral-600 opacity-40 cursor-not-allowed'
                             }`}
                         >
@@ -352,30 +362,14 @@ export default function Projects() {
                 </div>
             </div>
 
-            {/* Dynamic Carousel Track with edge gradient fades */}
+            {/* Dynamic Carousel Track without visual clipping */}
             <div className="relative">
-                {/* Left Edge Fade */}
-                <div
-                    className={`pointer-events-none absolute left-0 top-0 bottom-6 w-12 sm:w-20 bg-gradient-to-r from-neutral-50 dark:from-neutral-950 to-transparent z-10 transition-opacity duration-300 ${
-                        canScrollLeft ? 'opacity-100' : 'opacity-0'
-                    }`}
-                />
-
-                {/* Right Edge Fade */}
-                <div
-                    className={`pointer-events-none absolute right-0 top-0 bottom-6 w-12 sm:w-20 bg-gradient-to-l from-neutral-50 dark:from-neutral-950 to-transparent z-10 transition-opacity duration-300 ${
-                        canScrollRight ? 'opacity-100' : 'opacity-0'
-                    }`}
-                />
-
                 <div
                     ref={carouselRef}
                     style={{
-                        maskImage: maskGradient,
-                        WebkitMaskImage: maskGradient,
-                        transition: 'mask-image 0.2s ease, -webkit-mask-image 0.2s ease',
+                        paddingRight: 'max(32px, calc(100% - 480px))',
                     }}
-                    className="flex gap-6 sm:gap-7 overflow-x-auto scroll-smooth snap-x snap-mandatory py-3 pb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    className="flex gap-6 sm:gap-7 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 pb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 >
                     {filteredProjects.map((project) => {
                         const isOnline = status[project.id as keyof typeof status];
@@ -394,7 +388,7 @@ export default function Projects() {
                                             alt={project.title}
                                             className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-106 transition-all duration-700"
                                         />
-                                        {/* Gradient overlay */}
+                                        {/* Gradient overlay on image */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
                                         {/* Status Badge */}
@@ -506,9 +500,6 @@ export default function Projects() {
                             </div>
                         );
                     })}
-
-                    {/* End Spacer for breathing room when scrolled to last card */}
-                    <div className="shrink-0 w-8 sm:w-16 pointer-events-none" aria-hidden="true" />
                 </div>
             </div>
 
@@ -530,7 +521,6 @@ export default function Projects() {
                 </div>
 
                 <div className="flex items-center gap-3 text-xs font-semibold text-neutral-500 dark:text-neutral-400">
-                    {/* Visible only on mobile */}
                     <span className="sm:hidden text-[11px] text-neutral-400">← Swipe pour explorer →</span>
                     <span className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 font-mono">
                         0{currentIndex + 1} / 0{filteredProjects.length}
