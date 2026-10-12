@@ -1,11 +1,12 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
-import { Sun, Moon, Menu, X, ChevronDown, Gamepad2, Layers, Briefcase, Mail, Sparkles } from "lucide-react";
+import { Sun, Moon, Menu, X, ChevronDown, Gamepad2, Layers, Briefcase, Mail, Sparkles, Code2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_SECTIONS = [
     { name: 'Experiences', id: 'experiences', icon: Briefcase },
+    { name: 'Skills', id: 'skills', icon: Code2 },
     { name: 'Projects', id: 'projects', icon: Layers, isDropdown: true },
     { name: 'Contact', id: 'contact', icon: Mail },
 ];
@@ -276,6 +277,14 @@ export default function NavigationBar() {
                             >
                                 <Briefcase size={18} className="text-purple-600" />
                                 <span>Experiences</span>
+                            </button>
+
+                            <button
+                                onClick={handleSectionClick('skills')}
+                                className="w-full text-left py-2.5 px-3 rounded-xl text-base font-semibold text-neutral-900 dark:text-white hover:bg-purple-50 dark:hover:bg-white/5 flex items-center gap-3"
+                            >
+                                <Code2 size={18} className="text-purple-600" />
+                                <span>Skills</span>
                             </button>
 
                             <div className="space-y-1">

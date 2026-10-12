@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import Projects from '../pages/Projects';
 import Contact from '../pages/Contact';
 import Experiences from '../pages/Experiences';
+import Skills from '../pages/Skills';
 
 const smoothScroll = (id: string) => {
     const section = document.getElementById(id);
@@ -57,8 +58,9 @@ export default function ScrollPage() {
             <main className="bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300 w-full">
                 <section id="home" className="scroll-mt-20 bg-linear-to-b from-neutral-50 to-neutral-100 dark:bg-linear-to-b dark:from-neutral-950 dark:to-neutral-900"><Home /></section>
                 <section id="experiences" className="scroll-mt-20 bg-neutral-100 dark:bg-neutral-900"><Experiences /></section>
-                <section id="projects" className="scroll-mt-20 bg-linear-to-b from-neutral-100 to-neutral-50 dark:bg-linear-to-b dark:from-neutral-900 dark:to-neutral-950"><Projects /></section>
-                <section id="contact" className="scroll-mt-20 bg-neutral-50 dark:bg-neutral-950"><Contact /></section>
+                <section id="skills" className="scroll-mt-20 bg-linear-to-b from-neutral-100 to-neutral-50 dark:bg-linear-to-b dark:from-neutral-900 dark:to-neutral-950"><Skills /></section>
+                <section id="projects" className="scroll-mt-20 bg-neutral-50 dark:bg-neutral-950"><Projects /></section>
+                <section id="contact" className="scroll-mt-20 bg-linear-to-b from-neutral-50 to-neutral-100 dark:bg-linear-to-b dark:from-neutral-950 dark:to-neutral-900"><Contact /></section>
             </main>
         </>
     );
