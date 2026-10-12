@@ -7,9 +7,11 @@ import {
     Info,
     X,
     CheckCircle2,
-    ExternalLink
+    ExternalLink,
+    ChevronLeft,
+    ChevronRight
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import pongIcon from '../assets/pongIcon.png';
 import tdIcon from '../assets/tdIcon.png';
 import smIcon from '../assets/smIcon.png';
@@ -126,6 +128,12 @@ export default function Projects() {
     const [activeFilter, setActiveFilter] = useState<'all' | 'saas' | 'web-game' | 'engine-game'>('all');
     const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
+    // Carousel state
+    const carouselRef = useRef<HTMLDivElement>(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
     useEffect(() => {
         const checkHealth = async (id: string, url: string) => {
             try {
@@ -156,43 +164,125 @@ export default function Projects() {
         return project.category === activeFilter;
     });
 
+    // Update carousel navigation state
+    const updateScrollState = () => {
+        if (carouselRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+            setCanScrollLeft(scrollLeft > 15);
+            setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 15);
+
+            const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 420;
+            const gap = 24;
+            const newIndex = Math.round(scrollLeft / (cardWidth + gap));
+            setCurrentIndex(Math.min(Math.max(newIndex, 0), filteredProjects.length - 1));
+        }
+    };
+
+    useEffect(() => {
+        const el = carouselRef.current;
+        if (el) {
+            el.addEventListener('scroll', updateScrollState, { passive: true });
+            updateScrollState();
+            return () => el.removeEventListener('scroll', updateScrollState);
+        }
+    }, [filteredProjects]);
+
+    const scrollToCard = (index: number) => {
+        if (carouselRef.current) {
+            const cards = carouselRef.current.children;
+            if (cards[index]) {
+                (cards[index] as HTMLElement).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'start'
+                });
+            }
+        }
+    };
+
+    const scrollPrev = () => {
+        if (carouselRef.current) {
+            const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 420;
+            carouselRef.current.scrollBy({ left: -(cardWidth + 24), behavior: 'smooth' });
+        }
+    };
+
+    const scrollNext = () => {
+        if (carouselRef.current) {
+            const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 420;
+            carouselRef.current.scrollBy({ left: cardWidth + 24, behavior: 'smooth' });
+        }
+    };
+
     return (
         <motion.section
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8"
+            className="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
         >
             {/* Section Header */}
-            <div className="mb-12">
-                <div className="flex items-center gap-3 mb-3">
-                    <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/20 inline-flex items-center gap-1.5">
-                        <Gamepad2 size={14} />
-                        Portfolio & Creations
-                    </span>
+            <div className="mb-10">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <div className="flex items-center gap-3 mb-3">
+                            <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/20 inline-flex items-center gap-1.5">
+                                <Gamepad2 size={14} />
+                                Portfolio & Creations
+                            </span>
+                        </div>
+                        <h2 className="text-4xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter flex items-center gap-4">
+                            Featured Projects
+                            <span className="hidden sm:inline-block h-1 w-24 bg-gradient-to-r from-purple-600 to-transparent rounded-full opacity-40"></span>
+                        </h2>
+                        <p className="mt-3 text-neutral-600 dark:text-neutral-400 text-sm sm:text-base max-w-2xl leading-relaxed">
+                            Swipe or scroll horizontally through my creations — live SaaS, browser games, and indie prototypes.
+                        </p>
+                    </div>
+
+                    {/* Carousel Nav Arrows (Desktop & Tablet) */}
+                    <div className="flex items-center gap-2.5 shrink-0">
+                        <button
+                            onClick={scrollPrev}
+                            disabled={!canScrollLeft}
+                            aria-label="Previous project"
+                            className={`p-3 rounded-2xl border transition-all duration-200 cursor-pointer ${
+                                canScrollLeft
+                                    ? 'bg-white dark:bg-white/5 border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-white hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 shadow-sm hover:scale-105 active:scale-95'
+                                    : 'bg-neutral-100 dark:bg-white/5 border-transparent text-neutral-400 dark:text-neutral-600 opacity-40 cursor-not-allowed'
+                            }`}
+                        >
+                            <ChevronLeft size={20} />
+                        </button>
+                        <button
+                            onClick={scrollNext}
+                            disabled={!canScrollRight}
+                            aria-label="Next project"
+                            className={`p-3 rounded-2xl border transition-all duration-200 cursor-pointer ${
+                                canScrollRight
+                                    ? 'bg-white dark:bg-white/5 border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-white hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 shadow-sm hover:scale-105 active:scale-95'
+                                    : 'bg-neutral-100 dark:bg-white/5 border-transparent text-neutral-400 dark:text-neutral-600 opacity-40 cursor-not-allowed'
+                            }`}
+                        >
+                            <ChevronRight size={20} />
+                        </button>
+                    </div>
                 </div>
-                <h2 className="text-4xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter flex items-center gap-4">
-                    Featured Projects
-                    <span className="h-1 flex-1 bg-gradient-to-r from-purple-600 to-transparent rounded-full opacity-25"></span>
-                </h2>
-                <p className="mt-3 text-neutral-600 dark:text-neutral-400 text-sm sm:text-base max-w-2xl leading-relaxed">
-                    From a live competitive SaaS platform to interactive browser games and indie prototypes. Launch and explore them directly!
-                </p>
 
                 {/* Filter Tabs */}
-                <div className="mt-8 flex flex-wrap gap-2">
+                <div className="mt-6 flex flex-wrap gap-2">
                     <button
-                        onClick={() => setActiveFilter('all')}
+                        onClick={() => { setActiveFilter('all'); scrollToCard(0); }}
                         className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                             activeFilter === 'all'
                                 ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
                                 : 'bg-neutral-100 dark:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                         }`}
                     >
-                        All Projects ({PROJECTS_DATA.length})
+                        All ({PROJECTS_DATA.length})
                     </button>
                     <button
-                        onClick={() => setActiveFilter('saas')}
+                        onClick={() => { setActiveFilter('saas'); scrollToCard(0); }}
                         className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                             activeFilter === 'saas'
                                 ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
@@ -202,7 +292,7 @@ export default function Projects() {
                         Full Stack SaaS (1)
                     </button>
                     <button
-                        onClick={() => setActiveFilter('web-game')}
+                        onClick={() => { setActiveFilter('web-game'); scrollToCard(0); }}
                         className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                             activeFilter === 'web-game'
                                 ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
@@ -212,7 +302,7 @@ export default function Projects() {
                         Browser Games (2)
                     </button>
                     <button
-                        onClick={() => setActiveFilter('engine-game')}
+                        onClick={() => { setActiveFilter('engine-game'); scrollToCard(0); }}
                         className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                             activeFilter === 'engine-game'
                                 ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
@@ -224,136 +314,166 @@ export default function Projects() {
                 </div>
             </div>
 
-            {/* Projects Grid: 2 columns on desktop for optimal breathing room and readability */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredProjects.map((project) => {
-                    const isOnline = status[project.id as keyof typeof status];
+            {/* Dynamic Single-Row Carousel Track */}
+            <div className="relative">
+                <div
+                    ref={carouselRef}
+                    className="flex gap-6 sm:gap-7 overflow-x-auto scroll-smooth snap-x snap-mandatory py-3 pb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                >
+                    {filteredProjects.map((project) => {
+                        const isOnline = status[project.id as keyof typeof status];
 
-                    return (
-                        <div
-                            key={project.id}
-                            className="group h-full bg-white dark:bg-purple-950/25 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-900/10 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
-                        >
-                            {/* Card Top: Banner Image & Status */}
-                            <div>
-                                <div className="relative h-56 sm:h-64 overflow-hidden bg-neutral-950">
-                                    <img
-                                        src={project.icon}
-                                        alt={project.title}
-                                        className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-106 transition-all duration-700"
-                                    />
-                                    {/* Gradient overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                        return (
+                            <div
+                                key={project.id}
+                                className="snap-start shrink-0 w-[85vw] sm:w-[420px] lg:w-[460px] xl:w-[480px] group bg-white dark:bg-purple-950/25 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-900/10 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
+                            >
+                                {/* Card Top: Banner Image & Status */}
+                                <div>
+                                    <div className="relative h-52 sm:h-56 overflow-hidden bg-neutral-950">
+                                        <img
+                                            src={project.icon}
+                                            alt={project.title}
+                                            className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-106 transition-all duration-700"
+                                        />
+                                        {/* Gradient overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
-                                    {/* Status Badge */}
-                                    <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 shadow-sm">
-                                        {project.id === 'LoreTracker' ? (
-                                            <>
-                                                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
-                                                <span className="text-[10px] font-bold text-white uppercase tracking-wider">
-                                                    Live SaaS
-                                                </span>
-                                            </>
-                                        ) : project.id === 'Pong' ? (
-                                            <>
-                                                <span className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></span>
-                                                <span className="text-[10px] font-bold text-white uppercase tracking-wider">
-                                                    {isOnline ? 'Online Match' : 'Local Playable'}
-                                                </span>
-                                            </>
-                                        ) : project.id === 'Tower Defense' ? (
-                                            <>
-                                                <span className={`h-2 w-2 rounded-full ${isOnline ? 'bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse' : 'bg-amber-500 shadow-[0_0_8px_#f59e0b]'}`}></span>
-                                                <span className="text-[10px] font-bold text-white uppercase tracking-wider">
-                                                    {isOnline ? 'Multiplayer Live' : '1v1 Arena'}
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc] animate-pulse"></span>
-                                                <span className="text-[10px] font-bold text-white uppercase tracking-wider">In Dev</span>
-                                            </>
-                                        )}
-                                    </div>
+                                        {/* Status Badge */}
+                                        <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 shadow-sm">
+                                            {project.id === 'LoreTracker' ? (
+                                                <>
+                                                    <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
+                                                    <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+                                                        Live SaaS
+                                                    </span>
+                                                </>
+                                            ) : project.id === 'Pong' ? (
+                                                <>
+                                                    <span className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></span>
+                                                    <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+                                                        {isOnline ? 'Online Match' : 'Local Playable'}
+                                                    </span>
+                                                </>
+                                            ) : project.id === 'Tower Defense' ? (
+                                                <>
+                                                    <span className={`h-2 w-2 rounded-full ${isOnline ? 'bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse' : 'bg-amber-500 shadow-[0_0_8px_#f59e0b]'}`}></span>
+                                                    <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+                                                        {isOnline ? 'Multiplayer Live' : '1v1 Arena'}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc] animate-pulse"></span>
+                                                    <span className="text-[10px] font-bold text-white uppercase tracking-wider">In Dev</span>
+                                                </>
+                                            )}
+                                        </div>
 
-                                    {/* Category Pill Tag */}
-                                    <div className="absolute bottom-4 left-5 flex items-center gap-2 text-white font-bold text-xs uppercase tracking-wider drop-shadow-sm">
-                                        <span className="px-2.5 py-1 rounded-md bg-purple-600/85 backdrop-blur-sm">
-                                            {project.categoryLabel}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* Card Body */}
-                                <div className="p-6 sm:p-7 space-y-3">
-                                    <h3 className="text-2xl font-black text-neutral-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                                        {project.title}
-                                    </h3>
-
-                                    <p className="text-xs sm:text-sm font-semibold text-purple-700 dark:text-purple-300">
-                                        {project.subtitle}
-                                    </p>
-
-                                    <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-                                        {project.summary}
-                                    </p>
-
-                                    {/* Tech Badges */}
-                                    <div className="flex flex-wrap gap-1.5 pt-3">
-                                        {project.tech.map((t) => (
-                                            <span
-                                                key={t}
-                                                className="px-2.5 py-1 bg-purple-50 dark:bg-white/5 border border-purple-100 dark:border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-tight text-purple-700 dark:text-purple-300"
-                                            >
-                                                {t}
+                                        {/* Category Pill Tag */}
+                                        <div className="absolute bottom-4 left-5 flex items-center gap-2 text-white font-bold text-xs uppercase tracking-wider drop-shadow-sm">
+                                            <span className="px-2.5 py-1 rounded-md bg-purple-600/85 backdrop-blur-sm">
+                                                {project.categoryLabel}
                                             </span>
-                                        ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Card Body */}
+                                    <div className="p-6 sm:p-7 space-y-3">
+                                        <h3 className="text-2xl font-black text-neutral-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                                            {project.title}
+                                        </h3>
+
+                                        <p className="text-xs sm:text-sm font-semibold text-purple-700 dark:text-purple-300">
+                                            {project.subtitle}
+                                        </p>
+
+                                        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed line-clamp-3">
+                                            {project.summary}
+                                        </p>
+
+                                        {/* Tech Badges */}
+                                        <div className="flex flex-wrap gap-1.5 pt-2">
+                                            {project.tech.map((t) => (
+                                                <span
+                                                    key={t}
+                                                    className="px-2.5 py-1 bg-purple-50 dark:bg-white/5 border border-purple-100 dark:border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-tight text-purple-700 dark:text-purple-300"
+                                                >
+                                                    {t}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Card Footer Actions */}
-                            <div className="p-6 sm:p-7 pt-0 border-t border-neutral-100 dark:border-white/5 mt-4 flex items-center gap-3">
-                                {project.isExternal ? (
-                                    <a
-                                        href={project.path}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md shadow-purple-600/20 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
-                                    >
-                                        <span>Visit loretracker.fr</span>
-                                        <ExternalLink size={15} />
-                                    </a>
-                                ) : project.path ? (
-                                    <NavLink
-                                        to={project.path}
-                                        className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md shadow-purple-600/20 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
-                                    >
-                                        <Play size={15} fill="currentColor" />
-                                        <span>Play in Browser</span>
-                                    </NavLink>
-                                ) : (
+                                {/* Card Footer Actions */}
+                                <div className="p-6 sm:p-7 pt-0 border-t border-neutral-100 dark:border-white/5 mt-4 flex items-center gap-3">
+                                    {project.isExternal ? (
+                                        <a
+                                            href={project.path}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md shadow-purple-600/20 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
+                                        >
+                                            <span>Visit loretracker.fr</span>
+                                            <ExternalLink size={15} />
+                                        </a>
+                                    ) : project.path ? (
+                                        <NavLink
+                                            to={project.path}
+                                            className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md shadow-purple-600/20 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
+                                        >
+                                            <Play size={15} fill="currentColor" />
+                                            <span>Play in Browser</span>
+                                        </NavLink>
+                                    ) : (
+                                        <button
+                                            onClick={() => setSelectedProject(project)}
+                                            className="flex-1 py-3 px-4 rounded-xl bg-neutral-200/80 dark:bg-white/10 hover:bg-neutral-300 dark:hover:bg-white/20 text-neutral-900 dark:text-white text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
+                                        >
+                                            <Sparkles size={15} />
+                                            <span>In Development</span>
+                                        </button>
+                                    )}
+
                                     <button
                                         onClick={() => setSelectedProject(project)}
-                                        className="flex-1 py-3 px-4 rounded-xl bg-neutral-200/80 dark:bg-white/10 hover:bg-neutral-300 dark:hover:bg-white/20 text-neutral-900 dark:text-white text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
+                                        title="View project details & architecture"
+                                        aria-label="View details"
+                                        className="p-3 rounded-xl bg-neutral-100 dark:bg-white/5 hover:bg-neutral-200 dark:hover:bg-white/10 border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer"
                                     >
-                                        <Sparkles size={15} />
-                                        <span>In Development</span>
+                                        <Info size={17} />
                                     </button>
-                                )}
-
-                                <button
-                                    onClick={() => setSelectedProject(project)}
-                                    title="View project details & architecture"
-                                    aria-label="View details"
-                                    className="p-3 rounded-xl bg-neutral-100 dark:bg-white/5 hover:bg-neutral-200 dark:hover:bg-white/10 border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer"
-                                >
-                                    <Info size={17} />
-                                </button>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Carousel Pagination Dots & Progress Indicator */}
+            <div className="mt-6 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    {filteredProjects.map((proj, idx) => (
+                        <button
+                            key={proj.id}
+                            onClick={() => scrollToCard(idx)}
+                            aria-label={`Jump to project ${idx + 1}`}
+                            className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                                currentIndex === idx
+                                    ? 'w-8 bg-purple-600'
+                                    : 'w-2.5 bg-neutral-300 dark:bg-white/20 hover:bg-purple-400'
+                            }`}
+                        />
+                    ))}
+                </div>
+
+                <div className="flex items-center gap-3 text-xs font-semibold text-neutral-500 dark:text-neutral-400">
+                    <span className="hidden sm:inline">← Drag or swipe horizontally →</span>
+                    <span className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 font-mono">
+                        0{currentIndex + 1} / 0{filteredProjects.length}
+                    </span>
+                </div>
             </div>
 
             {/* Project Details Modal */}
