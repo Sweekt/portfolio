@@ -38,9 +38,9 @@ export default function Contact() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="max-w-7xl mx-auto py-20 px-6 lg:px-16"
+            className="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8"
         >
-            <div className="mb-32">
+            <div className="mb-12 sm:mb-16">
                 <h2 className="text-4xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-1 flex-1 bg-gradient-to-r from-transparent to-purple-600 rounded-full opacity-20"></span>
                     Get in touch
@@ -48,7 +48,7 @@ export default function Contact() {
                 </h2>
             </div>
 
-            <div className="flex justify-center mb-32">
+            <div className="flex justify-center mb-16">
                 <div className="w-full max-w-2xl bg-white dark:bg-purple-950/30 backdrop-blur-xl p-8 lg:p-12 rounded-3xl border-2 border-neutral-100 dark:border-white/10 shadow-2xl shadow-purple-900/10">
 
                     <AnimatePresence mode="wait">

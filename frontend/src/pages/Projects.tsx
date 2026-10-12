@@ -81,7 +81,7 @@ export default function Projects() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="mx-32 py-20 px-6 lg:px-16"
+            className="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8"
         >
             <div className="mb-16">
                 <h2 className="text-4xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter flex items-center gap-4">
@@ -96,7 +96,7 @@ export default function Projects() {
 
                     return (
                         <NavLink to={isOnline ? project.path : "#"} key={project.id} className={`group ${!isOnline ? 'cursor-default' : ''}`} onClick={(e) => !isOnline && e.preventDefault()}>
-                            <div className={`h-full bg-white dark:bg-purple-950/30 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 transition-all duration-300 group-hover:border-purple-500/50 group-hover:-tranneutral-y-2`}>
+                            <div className={`h-full bg-white dark:bg-purple-950/30 backdrop-blur-xl border-2 border-neutral-100 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/5 transition-all duration-300 group-hover:border-purple-500/50 group-hover:-translate-y-2`}>
                                 <div className="relative h-48 overflow-hidden bg-neutral-900">
                                     <img src={project.icon} alt={project.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
                                     <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
