@@ -34,7 +34,7 @@ export default function Home() {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
                         </span>
-                        <span>Full Stack Developer @ ESN</span>
+                        <span>Full Stack Developer @ Connexia</span>
                         <span className="text-purple-300 dark:text-purple-600">•</span>
                         <span>Creative Coder</span>
                     </motion.div>
@@ -61,7 +61,7 @@ export default function Home() {
                         className="mt-5 text-base sm:text-lg lg:text-xl text-neutral-600 dark:text-neutral-300 font-normal max-w-2xl leading-relaxed"
                     >
                         Full Stack Developer crafting robust web applications and interactive game experiences.
-                        Alumni of <span className="font-semibold text-neutral-900 dark:text-white">42 Lyon</span> & engineer from <span className="font-semibold text-neutral-900 dark:text-white">INSA Lyon</span>, driven by clean architecture, multiplayer systems, and creative computing.
+                        Alumni of <span className="font-semibold text-neutral-900 dark:text-white">42 Lyon</span> & engineer from <span className="font-semibold text-neutral-900 dark:text-white">INSA Lyon</span>, driven by clean architecture, creative computing, and building software that solves real-world needs.
                     </motion.p>
 
                     {/* CTAs and Social Links */}
