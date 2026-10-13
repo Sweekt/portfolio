@@ -11,11 +11,11 @@ import {
     ChevronLeft,
     ChevronRight
 } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
-import pongIcon from '../assets/pongIcon.png';
-import tdIcon from '../assets/tdIcon.png';
-import smIcon from '../assets/smIcon.png';
-import loreTrackerIcon from '../assets/loretracker.png';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import pongIcon from '../assets/pongIcon.webp';
+import tdIcon from '../assets/tdIcon.webp';
+import smIcon from '../assets/smIcon.webp';
+import loreTrackerIcon from '../assets/loretracker.webp';
 
 interface ProjectStatus {
     [key: string]: boolean;
@@ -171,7 +171,7 @@ export default function Projects() {
     }, [activeFilter]);
 
     // Determine which card is currently active based on offsetLeft distance to scrollLeft
-    const updateIndexFromScroll = () => {
+    const updateIndexFromScroll = useCallback(() => {
         const el = carouselRef.current;
         if (!el) return;
 
@@ -204,7 +204,7 @@ export default function Projects() {
         });
 
         setCurrentIndex(closestIdx);
-    };
+    }, [filteredProjects.length]);
 
     useEffect(() => {
         const el = carouselRef.current;
@@ -221,7 +221,21 @@ export default function Projects() {
                 if (timer) window.clearTimeout(timer);
             };
         }
-    }, [filteredProjects]);
+    }, [updateIndexFromScroll]);
+
+    // Accessibility: Close modal on Escape key press
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setSelectedProject(null);
+            }
+        };
+
+        if (selectedProject) {
+            window.addEventListener('keydown', handleKeyDown);
+            return () => window.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [selectedProject]);
 
     const scrollToCard = (index: number) => {
         const el = carouselRef.current;
@@ -386,6 +400,7 @@ export default function Projects() {
                                         <img
                                             src={project.icon}
                                             alt={project.title}
+                                            loading="lazy"
                                             className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-106 transition-all duration-700"
                                         />
                                         {/* Gradient overlay on image */}

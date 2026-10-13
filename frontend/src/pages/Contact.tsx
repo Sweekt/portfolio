@@ -9,13 +9,15 @@ import {
     Copy,
     Check,
     MapPin,
-    ArrowUpRight
+    ArrowUpRight,
+    AlertCircle
 } from 'lucide-react';
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 
 export default function Contact() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [copiedEmail, setCopiedEmail] = useState(false);
 
     const contactEmail = "b.roy@groupe-connexia.com";
@@ -29,6 +31,7 @@ export default function Contact() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
+        setErrorMessage(null);
 
         const formData = new FormData(e.currentTarget);
 
@@ -44,10 +47,10 @@ export default function Contact() {
             if (response.ok) {
                 setIsSubmitted(true);
             } else {
-                alert("Oups ! Unexpected error.");
+                setErrorMessage("Oups ! Une erreur inattendue s'est produite lors de l'envoi. Veuillez réessayer ou utiliser l'adresse email directe.");
             }
         } catch {
-            alert("Network error. Check your connection.");
+            setErrorMessage("Erreur réseau. Veuillez vérifier votre connexion ou m'écrire directement par email.");
         } finally {
             setIsLoading(false);
         }
@@ -225,6 +228,17 @@ export default function Contact() {
                                         className="w-full p-4 bg-neutral-50 dark:bg-white/5 border-2 border-neutral-100 dark:border-white/10 rounded-2xl focus:border-purple-500 dark:focus:border-purple-400 outline-none transition-all text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-white/20 resize-none text-sm"
                                     ></textarea>
                                 </div>
+
+                                {errorMessage && (
+                                    <div
+                                        role="alert"
+                                        aria-live="polite"
+                                        className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs sm:text-sm font-semibold flex items-center gap-2.5 animate-in fade-in duration-200"
+                                    >
+                                        <AlertCircle size={18} className="shrink-0" />
+                                        <span>{errorMessage}</span>
+                                    </div>
+                                )}
 
                                 <button
                                     disabled={isLoading}

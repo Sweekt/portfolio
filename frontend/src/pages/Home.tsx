@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import mePic from '../assets/meRound.png';
+import mePic from '../assets/meRound.webp';
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { ArrowRight, Code2, Gamepad2, Mail, Terminal } from 'lucide-react';
 
@@ -152,6 +152,9 @@ export default function Home() {
                             <img
                                 src={mePic}
                                 alt="Benjamin 'Sweek' Roy"
+                                width={420}
+                                height={420}
+                                fetchPriority="high"
                                 className="w-full h-full object-cover rounded-full transition-transform duration-700 group-hover:scale-105"
                             />
                         </div>

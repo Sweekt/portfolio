@@ -187,7 +187,7 @@ export default function Skills() {
                                                 {skill.name}
                                             </span>
                                             {skill.tag && (
-                                                <span className="text-[10px] font-medium opacity-65 pl-1 border-l border-current">
+                                                <span className="text-[10px] font-semibold opacity-85 dark:opacity-80 pl-1 border-l border-current">
                                                     {skill.tag}
                                                 </span>
                                             )}

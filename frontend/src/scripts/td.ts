@@ -220,8 +220,8 @@ export function tdGame(canvasTd: HTMLCanvasElement, room?: number) {
         ctxTd.fillText("Slime Defender", canvasTd.width * 0.545, canvasTd.height * 0.25, canvasTd.width * 0.6);
         // Tower Selection
         for (let i = 0; i < allTowers.length; i++) {
-            let centerx = (0.18 + Math.floor(i % 5) * 0.16) * canvasTd.width;
-            let centery = (0.54 + Math.floor(i / 5) * 0.16) * canvasTd.height;
+            const centerx = (0.18 + Math.floor(i % 5) * 0.16) * canvasTd.width;
+            const centery = (0.54 + Math.floor(i / 5) * 0.16) * canvasTd.height;
             drawRawButton(centerx, centery, canvasTd.width * 0.15, canvasTd.height * 0.15, isSelected(i));
             ctxTd.drawImage(assetsTd.getImage(`${allTowers[i].type}4`)!, centerx - tile * 1.1, centery - tile * 0.6, canvasTd.height * 0.11, canvasTd.height * 0.11);
             ctxTd.fillStyle = "#eaeaea";
@@ -314,7 +314,7 @@ export function tdGame(canvasTd: HTMLCanvasElement, room?: number) {
         ctxTd.lineWidth = tile * 0.1;
         ctxTd.font = `${tile * 0.5}px 'Press Start 2P'`;
         ctxTd.textAlign = "center"
-        let timer = gameTd.timer;
+        const timer = gameTd.timer;
         if (gameTd.start) {
             if (!gameTd.boss) {
                 ctxTd.strokeText(timeTostring(timer), canvasTd.width * 0.5, canvasTd.height * 0.5 + tile * 0.25);
