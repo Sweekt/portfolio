@@ -154,6 +154,22 @@ export default function NavigationBar() {
                                                 </button>
                                                 <div className="h-px bg-neutral-100 dark:bg-white/10 my-1" />
                                                 <a
+                                                    href="https://lorcadle.com"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={() => setProjectsDropdownOpen(false)}
+                                                    className="w-full text-left flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                                                >
+                                                    <Sparkles size={16} className="text-amber-500" />
+                                                    <div>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span>Lorcadle</span>
+                                                            <span className="px-1.5 py-0.2 bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[9px] font-bold rounded">Live</span>
+                                                        </div>
+                                                        <span className="text-[10px] text-neutral-400 font-normal">Daily Lorcana Guessing Game</span>
+                                                    </div>
+                                                </a>
+                                                <a
                                                     href="https://loretracker.fr"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -312,6 +328,16 @@ export default function NavigationBar() {
                                     <span>Projects</span>
                                 </button>
                                 <div className="pl-9 pr-2 space-y-1">
+                                    <a
+                                        href="https://lorcadle.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="flex items-center gap-2 py-2 px-3 rounded-lg text-sm text-neutral-600 dark:text-neutral-400 hover:text-purple-600 dark:hover:text-purple-300 hover:bg-purple-50 dark:hover:bg-white/5"
+                                    >
+                                        <Sparkles size={15} className="text-amber-500" />
+                                        <span>Lorcadle (Daily Game)</span>
+                                    </a>
                                     <a
                                         href="https://loretracker.fr"
                                         target="_blank"

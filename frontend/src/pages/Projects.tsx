@@ -16,6 +16,7 @@ import pongIcon from '../assets/pongIcon.webp';
 import tdIcon from '../assets/tdIcon.webp';
 import smIcon from '../assets/smIcon.webp';
 import loreTrackerIcon from '../assets/loretracker.webp';
+import lorcadleIcon from '../assets/lorcadle.svg';
 
 interface ProjectStatus {
     [key: string]: boolean;
@@ -33,11 +34,34 @@ interface ProjectData {
     details: string;
     highlights: string[];
     path: string;
+    ctaLabel?: string;
     isExternal?: boolean;
     isAlwaysPlayable?: boolean;
 }
 
 const PROJECTS_DATA: ProjectData[] = [
+    {
+        id: 'Lorcadle',
+        title: 'Lorcadle',
+        subtitle: 'Daily Wordle & Loldle-style guessing game in the Disney Lorcana universe',
+        category: 'web-game',
+        categoryLabel: 'Next.js • Daily Web Game',
+        icon: lorcadleIcon,
+        tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'i18n (4 Langs)', 'Seeded PRNG'],
+        summary: 'A daily Loldle & Wordle-inspired puzzle game for Disney Lorcana where players deduce the mystery card across 3 complementary daily game modes.',
+        details: 'Inspired by Loldle, Gamedle, and Wordle, Lorcadle challenges Disney Lorcana fans every day with three distinct puzzle modes: Classic Card (deducing Type, Ink Color, Cost, Inkwell, Franchise, Set, and Rarity), Character Mode (comparing Subtypes, Strength, Willpower, and Lore stats), and Blurred Card Mode (progressive 8-step artwork de-blurring). Powered by a deterministic seeded PRNG (FNV-1a & Mulberry32) for synchronized daily puzzles, full 4-language internationalization (FR, EN, DE, IT), streak tracking, and spoiler-free emoji grid sharing.',
+        highlights: [
+            'Live daily browser game available at lorcadle.com',
+            '3 daily puzzle modes: Classic Card, Character Stats & Progressive Blurred Card',
+            'Attribute deduction engine with exact, partial (dual-ink/multi-set) & directional (↑/↓) clues',
+            'Deterministic seeded daily rotation (FNV-1a & Mulberry32) with daily streak counter',
+            'Full multilingual support (FR, EN, DE, IT) & one-click emoji grid result sharing'
+        ],
+        path: 'https://lorcadle.com',
+        ctaLabel: 'Play on lorcadle.com',
+        isExternal: true,
+        isAlwaysPlayable: true
+    },
     {
         id: 'LoreTracker',
         title: 'LoreTracker',
@@ -56,6 +80,7 @@ const PROJECTS_DATA: ProjectData[] = [
             'Match history with replay links and Dreamborn deck exports'
         ],
         path: 'https://loretracker.fr',
+        ctaLabel: 'Visit loretracker.fr',
         isExternal: true,
         isAlwaysPlayable: false
     },
@@ -120,6 +145,7 @@ const PROJECTS_DATA: ProjectData[] = [
 
 export default function Projects() {
     const [status, setStatus] = useState<ProjectStatus>({
+        'Lorcadle': true,
         'Pong': false,
         'Tower Defense': false,
         'JRPG': false,
@@ -361,7 +387,7 @@ export default function Projects() {
                                 : 'bg-neutral-100 dark:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                         }`}
                     >
-                        Browser Games (2)
+                        Browser Games (3)
                     </button>
                     <button
                         onClick={() => { setActiveFilter('engine-game'); scrollToCard(0); }}
@@ -408,7 +434,14 @@ export default function Projects() {
 
                                         {/* Status Badge */}
                                         <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 shadow-sm">
-                                            {project.id === 'LoreTracker' ? (
+                                            {project.id === 'Lorcadle' ? (
+                                                <>
+                                                    <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] animate-pulse"></span>
+                                                    <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+                                                        Live Daily Game
+                                                    </span>
+                                                </>
+                                            ) : project.id === 'LoreTracker' ? (
                                                 <>
                                                     <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
                                                     <span className="text-[10px] font-bold text-white uppercase tracking-wider">
@@ -482,7 +515,7 @@ export default function Projects() {
                                             rel="noopener noreferrer"
                                             className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md shadow-purple-600/20 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer"
                                         >
-                                            <span>Visit loretracker.fr</span>
+                                            <span>{project.ctaLabel || 'Visit Website'}</span>
                                             <ExternalLink size={15} />
                                         </a>
                                     ) : project.path ? (
@@ -624,7 +657,7 @@ export default function Projects() {
                                         rel="noopener noreferrer"
                                         className="py-3 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-sm font-bold shadow-md shadow-purple-600/30 flex items-center gap-2 cursor-pointer"
                                     >
-                                        <span>Open loretracker.fr</span>
+                                        <span>{selectedProject.ctaLabel || 'Open Website'}</span>
                                         <ExternalLink size={16} />
                                     </a>
                                 ) : selectedProject.path ? (

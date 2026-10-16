@@ -136,6 +136,17 @@ export default function Footer() {
                         <ul className="space-y-2 text-sm">
                             <li>
                                 <a
+                                    href="https://lorcadle.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                                >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                                    <span>Lorcadle (Lorcana Daily Game)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a
                                     href="https://loretracker.fr"
                                     target="_blank"
                                     rel="noopener noreferrer"
